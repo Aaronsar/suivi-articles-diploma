@@ -234,7 +234,15 @@ const DEFAULT_ARTICLES = [
     { site: "diploma-sante.fr", titre: "Études de médecine : combien d'années et quel parcours", motcle: "études médecine durée parcours", status: "a_faire", date: "" },
 ];
 
-let articles = JSON.parse(localStorage.getItem('diploma_articles')) || [...DEFAULT_ARTICLES];
+const DATA_VERSION = 2;
+let articles;
+if (localStorage.getItem('diploma_version') != DATA_VERSION) {
+    articles = [...DEFAULT_ARTICLES];
+    localStorage.setItem('diploma_articles', JSON.stringify(articles));
+    localStorage.setItem('diploma_version', DATA_VERSION);
+} else {
+    articles = JSON.parse(localStorage.getItem('diploma_articles')) || [...DEFAULT_ARTICLES];
+}
 
 function save() {
     localStorage.setItem('diploma_articles', JSON.stringify(articles));
