@@ -15,6 +15,17 @@
         .header .stat .num { font-size: 24px; font-weight: bold; color: #c5a55a; }
         .header .stat .label { font-size: 11px; opacity: 0.7; }
 
+        .tabs { display: flex; background: white; border-bottom: 2px solid #eee; padding: 0 30px; }
+        .tab { padding: 14px 24px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; color: #888; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+        .tab:hover { color: #1a1a3e; }
+        .tab.active { color: #1a1a3e; border-bottom-color: #c5a55a; }
+        .tab .tab-count { background: #eee; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+        .tab.active .tab-count { background: #c5a55a; color: white; }
+        .tab-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot-all { background: #1a1a3e; }
+        .dot-prepa { background: #5b2d8e; }
+        .dot-afem { background: #1a7a4a; }
+
         .toolbar { padding: 15px 30px; background: white; border-bottom: 1px solid #ddd; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .toolbar select, .toolbar input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; }
         .toolbar input { width: 250px; }
@@ -77,12 +88,20 @@
     </div>
 </div>
 
+<div class="tabs">
+    <div class="tab active" onclick="switchTab('')" id="tab-all">
+        <span class="tab-dot dot-all"></span> Tous les sites <span class="tab-count" id="count-all">50</span>
+    </div>
+    <div class="tab" onclick="switchTab('prepamedecine.fr')" id="tab-prepa">
+        <span class="tab-dot dot-prepa"></span> prepamedecine.fr <span class="tab-count" id="count-prepa">25</span>
+    </div>
+    <div class="tab" onclick="switchTab('afem-edu.fr')" id="tab-afem">
+        <span class="tab-dot dot-afem"></span> afem-edu.fr <span class="tab-count" id="count-afem">25</span>
+    </div>
+</div>
+
 <div class="toolbar">
-    <select id="filter-site">
-        <option value="">Tous les sites</option>
-        <option value="prepamedecine.fr">prepamedecine.fr</option>
-        <option value="afem-edu.fr">afem-edu.fr</option>
-    </select>
+    <input type="hidden" id="filter-site" value="">
     <select id="filter-status">
         <option value="">Tous les états</option>
         <option value="a_faire">À faire</option>
@@ -190,6 +209,18 @@ function save() {
     localStorage.setItem('diploma_articles', JSON.stringify(articles));
 }
 
+let currentTab = '';
+
+function switchTab(site) {
+    currentTab = site;
+    document.getElementById('filter-site').value = site;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    if (site === '') document.getElementById('tab-all').classList.add('active');
+    else if (site === 'prepamedecine.fr') document.getElementById('tab-prepa').classList.add('active');
+    else document.getElementById('tab-afem').classList.add('active');
+    render();
+}
+
 function updateStats() {
     const total = articles.length;
     const todo = articles.filter(a => a.status === 'a_faire').length;
@@ -203,6 +234,11 @@ function updateStats() {
     document.getElementById('stat-publie').textContent = publie;
     document.getElementById('stat-percent').textContent = pct + '%';
     document.getElementById('progress-fill').style.width = pct + '%';
+
+    // Tab counts
+    document.getElementById('count-all').textContent = articles.length;
+    document.getElementById('count-prepa').textContent = articles.filter(a => a.site === 'prepamedecine.fr').length;
+    document.getElementById('count-afem').textContent = articles.filter(a => a.site === 'afem-edu.fr').length;
 }
 
 function render() {
