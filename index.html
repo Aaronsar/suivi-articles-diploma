@@ -25,6 +25,8 @@
         .dot-all { background: #1a1a3e; }
         .dot-prepa { background: #5b2d8e; }
         .dot-afem { background: #1a7a4a; }
+        .dot-diploma { background: #c5a55a; }
+        .site-diploma { background: #fdf3e0; color: #8a6d2b; }
 
         .toolbar { padding: 15px 30px; background: white; border-bottom: 1px solid #ddd; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .toolbar select, .toolbar input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; }
@@ -98,6 +100,9 @@
     <div class="tab" onclick="switchTab('afem-edu.fr')" id="tab-afem">
         <span class="tab-dot dot-afem"></span> afem-edu.fr <span class="tab-count" id="count-afem">25</span>
     </div>
+    <div class="tab" onclick="switchTab('diploma-sante.fr')" id="tab-diploma">
+        <span class="tab-dot dot-diploma"></span> diploma-sante.fr <span class="tab-count" id="count-diploma">25</span>
+    </div>
 </div>
 
 <div class="toolbar">
@@ -137,6 +142,7 @@
         <select id="input-site">
             <option value="prepamedecine.fr">prepamedecine.fr</option>
             <option value="afem-edu.fr">afem-edu.fr</option>
+            <option value="diploma-sante.fr">diploma-sante.fr</option>
         </select>
         <label>Nom de l'article</label>
         <input type="text" id="input-titre" placeholder="Titre de l'article">
@@ -201,6 +207,31 @@ const DEFAULT_ARTICLES = [
     { site: "afem-edu.fr", titre: "Calculer ses chances de réussite en PASS", motcle: "chances réussite PASS", status: "a_faire", date: "" },
     { site: "afem-edu.fr", titre: "Les 20 questions les plus posées sur le PASS", motcle: "questions PASS fréquentes", status: "a_faire", date: "" },
     { site: "afem-edu.fr", titre: "Kit de survie première année de médecine", motcle: "kit survie première année médecine", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Prépa PASS Sorbonne Université : réussir à Sorbonne", motcle: "prépa PASS sorbonne université", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Prépa PASS UPEC Créteil : programme et résultats", motcle: "prépa PASS UPEC créteil", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Prépa LAS UPEC Créteil", motcle: "prépa LAS UPEC", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Prépa LAS Sorbonne Paris Nord", motcle: "prépa LAS sorbonne paris nord", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Prépa LSPS UVSQ : la nouvelle voie santé 2026", motcle: "prépa LSPS UVSQ", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Numerus apertus 2026 par faculté en Île-de-France", motcle: "numerus apertus 2026 île de france", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Oraux PASS : comment les préparer et les réussir", motcle: "oraux PASS préparation", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Emploi du temps type d'un étudiant en PASS", motcle: "emploi du temps PASS", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Stage pré-rentrée S2 : pourquoi c'est décisif", motcle: "pré-rentrée S2 PASS", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Comment financer sa prépa médecine : bourses et aides", motcle: "financer prépa médecine bourses", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Devenir pharmacien : études, parcours et débouchés", motcle: "devenir pharmacien études", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Devenir sage-femme : le parcours complet", motcle: "devenir sage-femme études", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Devenir kinésithérapeute : PASS, LAS ou STAPS ?", motcle: "devenir kinésithérapeute PASS", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Devenir chirurgien : le parcours de A à Z", motcle: "devenir chirurgien études", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Double cursus médecine-sciences : pour qui et comment", motcle: "double cursus médecine sciences", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Classement des facs de médecine à Paris 2026", motcle: "classement fac médecine paris", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Comment écrire sa lettre de motivation Parcoursup PASS", motcle: "lettre motivation parcoursup PASS", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Spécialités au lycée pour réussir en médecine", motcle: "spécialités lycée médecine", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "JPO facs de médecine Paris 2026 : dates et conseils", motcle: "JPO médecine paris 2026", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Témoignages : ils ont réussi le PASS avec Diploma Santé", motcle: "témoignage réussite PASS diploma santé", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Gérer son stress en première année de médecine", motcle: "gérer stress PASS médecine", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Prépa médecine Paris 16e : notre campus Lauriston", motcle: "prépa médecine paris 16", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Prépa médecine Paris 12e : nos campus Rapée et Ledru-Rollin", motcle: "prépa médecine paris 12", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Coaching Hermione : notre méthode d'accompagnement", motcle: "coaching prépa médecine", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", titre: "Études de médecine : combien d'années et quel parcours", motcle: "études médecine durée parcours", status: "a_faire", date: "" },
 ];
 
 let articles = JSON.parse(localStorage.getItem('diploma_articles')) || [...DEFAULT_ARTICLES];
@@ -217,7 +248,8 @@ function switchTab(site) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     if (site === '') document.getElementById('tab-all').classList.add('active');
     else if (site === 'prepamedecine.fr') document.getElementById('tab-prepa').classList.add('active');
-    else document.getElementById('tab-afem').classList.add('active');
+    else if (site === 'afem-edu.fr') document.getElementById('tab-afem').classList.add('active');
+    else document.getElementById('tab-diploma').classList.add('active');
     render();
 }
 
@@ -239,6 +271,7 @@ function updateStats() {
     document.getElementById('count-all').textContent = articles.length;
     document.getElementById('count-prepa').textContent = articles.filter(a => a.site === 'prepamedecine.fr').length;
     document.getElementById('count-afem').textContent = articles.filter(a => a.site === 'afem-edu.fr').length;
+    document.getElementById('count-diploma').textContent = articles.filter(a => a.site === 'diploma-sante.fr').length;
 }
 
 function render() {
@@ -256,7 +289,7 @@ function render() {
     const tbody = document.getElementById('table-body');
     tbody.innerHTML = filtered.map((a, idx) => {
         const realIdx = articles.indexOf(a);
-        const siteClass = a.site === 'prepamedecine.fr' ? 'site-prepamedecine' : 'site-afem';
+        const siteClass = a.site === 'prepamedecine.fr' ? 'site-prepamedecine' : a.site === 'afem-edu.fr' ? 'site-afem' : 'site-diploma';
         const statusLabels = { a_faire: 'À faire', en_cours: 'En cours', publie: 'Publié' };
         return `<tr>
             <td>${realIdx + 1}</td>
