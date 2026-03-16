@@ -47,23 +47,34 @@
         .site-prepamedecine { background: #e8e0f0; color: #5b2d8e; }
         .site-afem { background: #dff0e8; color: #1a7a4a; }
 
+        .type-badge { padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+        .type-article { background: #e3f2fd; color: #1565c0; }
+        .type-page { background: #fce4ec; color: #c62828; }
+
         .status-select { padding: 5px 10px; border-radius: 15px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; appearance: none; -webkit-appearance: none; text-align: center; }
         .status-a_faire { background: #fff3e0; color: #e65100; }
         .status-en_cours { background: #e3f2fd; color: #1565c0; }
         .status-publie { background: #e8f5e9; color: #2e7d32; }
+        .status-non_pertinent { background: #f5f5f5; color: #9e9e9e; }
+        .status-deja_existant { background: #ede7f6; color: #7b1fa2; }
 
         .date-input { border: 1px solid #ddd; border-radius: 4px; padding: 4px 8px; font-size: 12px; width: 130px; }
         .date-input:empty::before { content: '—'; color: #ccc; }
+
+        .comment-input { border: 1px solid #e0e0e0; border-radius: 4px; padding: 5px 8px; font-size: 12px; width: 100%; min-width: 150px; background: #fafafa; transition: border-color 0.2s; }
+        .comment-input:focus { border-color: #c5a55a; outline: none; background: white; }
+        .comment-input::placeholder { color: #ccc; font-style: italic; }
 
         .delete-btn { background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.3; }
         .delete-btn:hover { opacity: 1; color: #e53935; }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
-        .modal { background: white; border-radius: 12px; padding: 30px; width: 450px; max-width: 90vw; }
+        .modal { background: white; border-radius: 12px; padding: 30px; width: 500px; max-width: 90vw; }
         .modal h2 { margin-bottom: 20px; color: #1a1a3e; font-size: 18px; }
         .modal label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: #666; }
-        .modal input, .modal select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 15px; font-size: 14px; }
+        .modal input, .modal select, .modal textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 15px; font-size: 14px; font-family: inherit; }
+        .modal textarea { resize: vertical; min-height: 60px; }
         .modal .modal-btns { display: flex; gap: 10px; justify-content: flex-end; }
         .modal .modal-btns button { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .modal .btn-cancel { background: #eee; color: #666; }
@@ -71,6 +82,9 @@
 
         .progress-bar { width: 100%; height: 6px; background: #eee; border-radius: 3px; margin-top: 8px; }
         .progress-fill { height: 100%; background: #c5a55a; border-radius: 3px; transition: width 0.3s; }
+
+        .row-non_pertinent td { opacity: 0.45; }
+        .row-deja_existant td { opacity: 0.55; }
     </style>
 </head>
 <body>
@@ -78,8 +92,8 @@
 <div class="header">
     <h1>Suivi Articles — Diploma Santé</h1>
     <div class="stats">
-        <div class="stat"><div class="num" id="stat-total">50</div><div class="label">TOTAL</div></div>
-        <div class="stat"><div class="num" id="stat-todo">50</div><div class="label">À FAIRE</div></div>
+        <div class="stat"><div class="num" id="stat-total">75</div><div class="label">TOTAL</div></div>
+        <div class="stat"><div class="num" id="stat-todo">75</div><div class="label">À FAIRE</div></div>
         <div class="stat"><div class="num" id="stat-encours">0</div><div class="label">EN COURS</div></div>
         <div class="stat"><div class="num" id="stat-publie">0</div><div class="label">PUBLIÉS</div></div>
         <div class="stat">
@@ -92,7 +106,7 @@
 
 <div class="tabs">
     <div class="tab active" onclick="switchTab('')" id="tab-all">
-        <span class="tab-dot dot-all"></span> Tous les sites <span class="tab-count" id="count-all">50</span>
+        <span class="tab-dot dot-all"></span> Tous les sites <span class="tab-count" id="count-all">75</span>
     </div>
     <div class="tab" onclick="switchTab('prepamedecine.fr')" id="tab-prepa">
         <span class="tab-dot dot-prepa"></span> prepamedecine.fr <span class="tab-count" id="count-prepa">25</span>
@@ -112,9 +126,16 @@
         <option value="a_faire">À faire</option>
         <option value="en_cours">En cours</option>
         <option value="publie">Publié</option>
+        <option value="non_pertinent">Non pertinent</option>
+        <option value="deja_existant">Déjà existant</option>
+    </select>
+    <select id="filter-type">
+        <option value="">Pages & Articles</option>
+        <option value="article">Articles uniquement</option>
+        <option value="page">Pages uniquement</option>
     </select>
     <input type="text" id="search" placeholder="Rechercher un article...">
-    <button class="btn-add" onclick="openModal()">+ Ajouter un article</button>
+    <button class="btn-add" onclick="openModal()">+ Ajouter</button>
     <button class="btn-export" onclick="exportCSV()">Exporter CSV</button>
 </div>
 
@@ -124,10 +145,12 @@
             <tr>
                 <th>#</th>
                 <th>Site</th>
-                <th>Nom de l'article</th>
+                <th>Type</th>
+                <th>Nom</th>
                 <th>Mot-clé ciblé</th>
+                <th>Commentaire</th>
                 <th>État</th>
-                <th>Date de publication</th>
+                <th>Date</th>
                 <th></th>
             </tr>
         </thead>
@@ -144,10 +167,17 @@
             <option value="afem-edu.fr">afem-edu.fr</option>
             <option value="diploma-sante.fr">diploma-sante.fr</option>
         </select>
-        <label>Nom de l'article</label>
-        <input type="text" id="input-titre" placeholder="Titre de l'article">
+        <label>Type</label>
+        <select id="input-type">
+            <option value="article">Article</option>
+            <option value="page">Page</option>
+        </select>
+        <label>Nom</label>
+        <input type="text" id="input-titre" placeholder="Titre de l'article ou de la page">
         <label>Mot-clé ciblé</label>
         <input type="text" id="input-motcle" placeholder="Mot-clé SEO">
+        <label>Commentaire / Instructions</label>
+        <textarea id="input-comment" placeholder="Indications pour la content manager..."></textarea>
         <div class="modal-btns">
             <button class="btn-cancel" onclick="closeModal()">Annuler</button>
             <button class="btn-save" onclick="saveArticle()">Ajouter</button>
@@ -157,84 +187,91 @@
 
 <script>
 const DEFAULT_ARTICLES = [
-    { site: "prepamedecine.fr", titre: "Classement des meilleures prépas médecine à Paris en 2026", motcle: "classement prépa médecine paris", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Prépa médecine : comparatif des prix à Paris", motcle: "prépa médecine prix", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Prépa PASS ou prépa LAS : laquelle choisir ?", motcle: "prépa PASS ou LAS", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Top 5 des prépas médecine en Île-de-France", motcle: "prépa médecine ile de france", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Prépa médecine en ligne vs présentiel : le vrai comparatif", motcle: "prépa médecine en ligne", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Réussir le PASS du premier coup : le guide complet", motcle: "réussir PASS premier coup", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Programme PASS 2026 : toutes les matières détaillées", motcle: "programme PASS 2026", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "PASS Sorbonne Université : programme, taux, conseils", motcle: "PASS sorbonne université", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "PASS Paris Cité 2026 : tout ce qu'il faut savoir", motcle: "PASS paris cité", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "PASS Paris-Saclay : guide complet", motcle: "PASS paris saclay", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "PASS UPEC Créteil : programme et taux de réussite", motcle: "PASS UPEC créteil", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "QCM PASS : comment s'entraîner efficacement", motcle: "QCM PASS entraînement", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Oraux PASS 2026 : comment les préparer", motcle: "oraux PASS préparation", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Tout savoir sur la LAS : fonctionnement et stratégie", motcle: "LAS médecine", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Quelle licence choisir pour la LAS ?", motcle: "quelle licence LAS", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "LAS 2 et LAS 3 : retenter médecine en L2 ou L3", motcle: "LAS 2 LAS 3 médecine", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Parcoursup médecine 2026 : calendrier et conseils", motcle: "parcoursup médecine 2026", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Lettre de motivation Parcoursup PASS : exemple", motcle: "lettre motivation parcoursup PASS", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Quelles spécialités choisir au lycée pour médecine ?", motcle: "spécialités lycée médecine", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "MMOPK : quelle filière choisir ?", motcle: "filière MMOPK choix", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Comment réviser en PASS : les 10 méthodes", motcle: "comment réviser PASS", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Planning de révision PASS semaine par semaine", motcle: "planning révision PASS", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Les erreurs qui font échouer en 1ère année", motcle: "erreurs première année médecine", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Combien d'heures de travail par jour en PASS ?", motcle: "heures travail PASS par jour", status: "a_faire", date: "" },
-    { site: "prepamedecine.fr", titre: "Annales PASS : où les trouver et comment les utiliser", motcle: "annales PASS", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Budget étudiant en médecine à Paris", motcle: "budget étudiant médecine paris", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Logement étudiant médecine Paris : les quartiers", motcle: "logement étudiant médecine paris", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Bourse et aides financières pour le PASS", motcle: "bourse étudiant PASS", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Stress en 1ère année de médecine : comment le gérer", motcle: "stress première année médecine", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Témoignage : comment j'ai réussi mon PASS", motcle: "témoignage réussite PASS", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Fac de médecine Sorbonne : tout savoir", motcle: "fac médecine sorbonne", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Fac de médecine Paris Cité : programme et avis", motcle: "fac médecine paris cité", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Fac de médecine Créteil UPEC : le guide", motcle: "fac médecine créteil", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "UVSQ : la réforme LSPS 2026 expliquée", motcle: "LSPS UVSQ 2026", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Médecine Bobigny Sorbonne Paris Nord", motcle: "médecine bobigny", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Je suis en terminale et je veux faire médecine", motcle: "terminale faire médecine", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Préparer médecine dès la première : utile ou pas ?", motcle: "première santé préparer médecine", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Moyenne au bac pour entrer en médecine", motcle: "moyenne bac médecine", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Réussir médecine sans être premier de classe", motcle: "réussir médecine sans être premier", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "JPO médecine Paris 2026 : toutes les dates", motcle: "JPO médecine paris 2026", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Numerus apertus 2026 : combien de places ?", motcle: "numerus apertus 2026", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Redoublement PASS : c'est possible ou pas ?", motcle: "redoublement PASS", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Passerelle médecine : entrer sans PASS", motcle: "passerelle médecine sans PASS", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Études de médecine à l'étranger : les alternatives", motcle: "études médecine étranger", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Réforme études de santé : ce qui a changé", motcle: "réforme études santé", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Simulateur Parcoursup PASS/LAS : mode d'emploi", motcle: "simulateur parcoursup PASS", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "QCM PASS gratuit : teste ton niveau", motcle: "QCM PASS gratuit", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Calculer ses chances de réussite en PASS", motcle: "chances réussite PASS", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Les 20 questions les plus posées sur le PASS", motcle: "questions PASS fréquentes", status: "a_faire", date: "" },
-    { site: "afem-edu.fr", titre: "Kit de survie première année de médecine", motcle: "kit survie première année médecine", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Prépa PASS Sorbonne Université : réussir à Sorbonne", motcle: "prépa PASS sorbonne université", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Prépa PASS UPEC Créteil : programme et résultats", motcle: "prépa PASS UPEC créteil", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Prépa LAS UPEC Créteil", motcle: "prépa LAS UPEC", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Prépa LAS Sorbonne Paris Nord", motcle: "prépa LAS sorbonne paris nord", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Prépa LSPS UVSQ : la nouvelle voie santé 2026", motcle: "prépa LSPS UVSQ", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Numerus apertus 2026 par faculté en Île-de-France", motcle: "numerus apertus 2026 île de france", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Oraux PASS : comment les préparer et les réussir", motcle: "oraux PASS préparation", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Emploi du temps type d'un étudiant en PASS", motcle: "emploi du temps PASS", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Stage pré-rentrée S2 : pourquoi c'est décisif", motcle: "pré-rentrée S2 PASS", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Comment financer sa prépa médecine : bourses et aides", motcle: "financer prépa médecine bourses", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Devenir pharmacien : études, parcours et débouchés", motcle: "devenir pharmacien études", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Devenir sage-femme : le parcours complet", motcle: "devenir sage-femme études", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Devenir kinésithérapeute : PASS, LAS ou STAPS ?", motcle: "devenir kinésithérapeute PASS", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Devenir chirurgien : le parcours de A à Z", motcle: "devenir chirurgien études", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Double cursus médecine-sciences : pour qui et comment", motcle: "double cursus médecine sciences", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Classement des facs de médecine à Paris 2026", motcle: "classement fac médecine paris", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Comment écrire sa lettre de motivation Parcoursup PASS", motcle: "lettre motivation parcoursup PASS", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Spécialités au lycée pour réussir en médecine", motcle: "spécialités lycée médecine", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "JPO facs de médecine Paris 2026 : dates et conseils", motcle: "JPO médecine paris 2026", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Témoignages : ils ont réussi le PASS avec Diploma Santé", motcle: "témoignage réussite PASS diploma santé", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Gérer son stress en première année de médecine", motcle: "gérer stress PASS médecine", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Prépa médecine Paris 16e : notre campus Lauriston", motcle: "prépa médecine paris 16", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Prépa médecine Paris 12e : nos campus Rapée et Ledru-Rollin", motcle: "prépa médecine paris 12", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Coaching Hermione : notre méthode d'accompagnement", motcle: "coaching prépa médecine", status: "a_faire", date: "" },
-    { site: "diploma-sante.fr", titre: "Études de médecine : combien d'années et quel parcours", motcle: "études médecine durée parcours", status: "a_faire", date: "" },
+    // === prepamedecine.fr (25 articles) ===
+    { site: "prepamedecine.fr", type: "article", titre: "Classement des meilleures prépas médecine à Paris en 2026", motcle: "classement prépa médecine paris", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Prépa médecine : comparatif des prix à Paris", motcle: "prépa médecine prix", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Prépa PASS ou prépa LAS : laquelle choisir ?", motcle: "prépa PASS ou LAS", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Top 5 des prépas médecine en Île-de-France", motcle: "prépa médecine ile de france", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Prépa médecine en ligne vs présentiel : le vrai comparatif", motcle: "prépa médecine en ligne", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Réussir le PASS du premier coup : le guide complet", motcle: "réussir PASS premier coup", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Programme PASS 2026 : toutes les matières détaillées", motcle: "programme PASS 2026", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "PASS Sorbonne Université : programme, taux, conseils", motcle: "PASS sorbonne université", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "PASS Paris Cité 2026 : tout ce qu'il faut savoir", motcle: "PASS paris cité", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "PASS Paris-Saclay : guide complet", motcle: "PASS paris saclay", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "PASS UPEC Créteil : programme et taux de réussite", motcle: "PASS UPEC créteil", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "QCM PASS : comment s'entraîner efficacement", motcle: "QCM PASS entraînement", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Oraux PASS 2026 : comment les préparer", motcle: "oraux PASS préparation", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Tout savoir sur la LAS : fonctionnement et stratégie", motcle: "LAS médecine", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Quelle licence choisir pour la LAS ?", motcle: "quelle licence LAS", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "LAS 2 et LAS 3 : retenter médecine en L2 ou L3", motcle: "LAS 2 LAS 3 médecine", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Parcoursup médecine 2026 : calendrier et conseils", motcle: "parcoursup médecine 2026", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Lettre de motivation Parcoursup PASS : exemple", motcle: "lettre motivation parcoursup PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Quelles spécialités choisir au lycée pour médecine ?", motcle: "spécialités lycée médecine", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "MMOPK : quelle filière choisir ?", motcle: "filière MMOPK choix", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Comment réviser en PASS : les 10 méthodes", motcle: "comment réviser PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Planning de révision PASS semaine par semaine", motcle: "planning révision PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Les erreurs qui font échouer en 1ère année", motcle: "erreurs première année médecine", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Combien d'heures de travail par jour en PASS ?", motcle: "heures travail PASS par jour", commentaire: "", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", type: "article", titre: "Annales PASS : où les trouver et comment les utiliser", motcle: "annales PASS", commentaire: "", status: "a_faire", date: "" },
+
+    // === afem-edu.fr (25 articles) ===
+    { site: "afem-edu.fr", type: "article", titre: "Budget étudiant en médecine à Paris", motcle: "budget étudiant médecine paris", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Logement étudiant médecine Paris : les quartiers", motcle: "logement étudiant médecine paris", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Bourse et aides financières pour le PASS", motcle: "bourse étudiant PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Stress en 1ère année de médecine : comment le gérer", motcle: "stress première année médecine", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Témoignage : comment j'ai réussi mon PASS", motcle: "témoignage réussite PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Fac de médecine Sorbonne : tout savoir", motcle: "fac médecine sorbonne", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Fac de médecine Paris Cité : programme et avis", motcle: "fac médecine paris cité", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Fac de médecine Créteil UPEC : le guide", motcle: "fac médecine créteil", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "UVSQ : la réforme LSPS 2026 expliquée", motcle: "LSPS UVSQ 2026", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Médecine Bobigny Sorbonne Paris Nord", motcle: "médecine bobigny", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Je suis en terminale et je veux faire médecine", motcle: "terminale faire médecine", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Préparer médecine dès la première : utile ou pas ?", motcle: "première santé préparer médecine", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Moyenne au bac pour entrer en médecine", motcle: "moyenne bac médecine", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Réussir médecine sans être premier de classe", motcle: "réussir médecine sans être premier", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "JPO médecine Paris 2026 : toutes les dates", motcle: "JPO médecine paris 2026", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Numerus apertus 2026 : combien de places ?", motcle: "numerus apertus 2026", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Redoublement PASS : c'est possible ou pas ?", motcle: "redoublement PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Passerelle médecine : entrer sans PASS", motcle: "passerelle médecine sans PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Études de médecine à l'étranger : les alternatives", motcle: "études médecine étranger", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Réforme études de santé : ce qui a changé", motcle: "réforme études santé", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Simulateur Parcoursup PASS/LAS : mode d'emploi", motcle: "simulateur parcoursup PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "QCM PASS gratuit : teste ton niveau", motcle: "QCM PASS gratuit", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Calculer ses chances de réussite en PASS", motcle: "chances réussite PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Les 20 questions les plus posées sur le PASS", motcle: "questions PASS fréquentes", commentaire: "", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", type: "article", titre: "Kit de survie première année de médecine", motcle: "kit survie première année médecine", commentaire: "", status: "a_faire", date: "" },
+
+    // === diploma-sante.fr — Pages (landing/service) ===
+    { site: "diploma-sante.fr", type: "page", titre: "Prépa PASS Sorbonne Université : réussir à Sorbonne", motcle: "prépa PASS sorbonne université", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "page", titre: "Prépa PASS UPEC Créteil : programme et résultats", motcle: "prépa PASS UPEC créteil", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "page", titre: "Prépa LAS UPEC Créteil", motcle: "prépa LAS UPEC", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "page", titre: "Prépa LAS Sorbonne Paris Nord", motcle: "prépa LAS sorbonne paris nord", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "page", titre: "Prépa LSPS UVSQ : la nouvelle voie santé 2026", motcle: "prépa LSPS UVSQ", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "page", titre: "Prépa médecine Paris 16e : notre campus Lauriston", motcle: "prépa médecine paris 16", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "page", titre: "Prépa médecine Paris 12e : nos campus Rapée et Ledru-Rollin", motcle: "prépa médecine paris 12", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "page", titre: "Coaching Hermione : notre méthode d'accompagnement", motcle: "coaching prépa médecine", commentaire: "", status: "a_faire", date: "" },
+
+    // === diploma-sante.fr — Articles (blog) ===
+    { site: "diploma-sante.fr", type: "article", titre: "Numerus apertus 2026 par faculté en Île-de-France", motcle: "numerus apertus 2026 île de france", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Oraux PASS : comment les préparer et les réussir", motcle: "oraux PASS préparation", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Emploi du temps type d'un étudiant en PASS", motcle: "emploi du temps PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Stage pré-rentrée S2 : pourquoi c'est décisif", motcle: "pré-rentrée S2 PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Comment financer sa prépa médecine : bourses et aides", motcle: "financer prépa médecine bourses", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Devenir pharmacien : études, parcours et débouchés", motcle: "devenir pharmacien études", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Devenir sage-femme : le parcours complet", motcle: "devenir sage-femme études", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Devenir kinésithérapeute : PASS, LAS ou STAPS ?", motcle: "devenir kinésithérapeute PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Devenir chirurgien : le parcours de A à Z", motcle: "devenir chirurgien études", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Double cursus médecine-sciences : pour qui et comment", motcle: "double cursus médecine sciences", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Classement des facs de médecine à Paris 2026", motcle: "classement fac médecine paris", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Comment écrire sa lettre de motivation Parcoursup PASS", motcle: "lettre motivation parcoursup PASS", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Spécialités au lycée pour réussir en médecine", motcle: "spécialités lycée médecine", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "JPO facs de médecine Paris 2026 : dates et conseils", motcle: "JPO médecine paris 2026", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Témoignages : ils ont réussi le PASS avec Diploma Santé", motcle: "témoignage réussite PASS diploma santé", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Gérer son stress en première année de médecine", motcle: "gérer stress PASS médecine", commentaire: "", status: "a_faire", date: "" },
+    { site: "diploma-sante.fr", type: "article", titre: "Études de médecine : combien d'années et quel parcours", motcle: "études médecine durée parcours", commentaire: "", status: "a_faire", date: "" },
 ];
 
-const DATA_VERSION = 2;
+const DATA_VERSION = 3;
 let articles;
 if (localStorage.getItem('diploma_version') != DATA_VERSION) {
     articles = [...DEFAULT_ARTICLES];
@@ -262,10 +299,11 @@ function switchTab(site) {
 }
 
 function updateStats() {
-    const total = articles.length;
-    const todo = articles.filter(a => a.status === 'a_faire').length;
-    const encours = articles.filter(a => a.status === 'en_cours').length;
-    const publie = articles.filter(a => a.status === 'publie').length;
+    const active = articles.filter(a => a.status !== 'non_pertinent' && a.status !== 'deja_existant');
+    const total = active.length;
+    const todo = active.filter(a => a.status === 'a_faire').length;
+    const encours = active.filter(a => a.status === 'en_cours').length;
+    const publie = active.filter(a => a.status === 'publie').length;
     const pct = total ? Math.round((publie / total) * 100) : 0;
 
     document.getElementById('stat-total').textContent = total;
@@ -285,12 +323,14 @@ function updateStats() {
 function render() {
     const filterSite = document.getElementById('filter-site').value;
     const filterStatus = document.getElementById('filter-status').value;
+    const filterType = document.getElementById('filter-type').value;
     const search = document.getElementById('search').value.toLowerCase();
 
     const filtered = articles.filter(a => {
         if (filterSite && a.site !== filterSite) return false;
         if (filterStatus && a.status !== filterStatus) return false;
-        if (search && !a.titre.toLowerCase().includes(search) && !a.motcle.toLowerCase().includes(search)) return false;
+        if (filterType && a.type !== filterType) return false;
+        if (search && !a.titre.toLowerCase().includes(search) && !a.motcle.toLowerCase().includes(search) && !(a.commentaire || '').toLowerCase().includes(search)) return false;
         return true;
     });
 
@@ -298,17 +338,23 @@ function render() {
     tbody.innerHTML = filtered.map((a, idx) => {
         const realIdx = articles.indexOf(a);
         const siteClass = a.site === 'prepamedecine.fr' ? 'site-prepamedecine' : a.site === 'afem-edu.fr' ? 'site-afem' : 'site-diploma';
-        const statusLabels = { a_faire: 'À faire', en_cours: 'En cours', publie: 'Publié' };
-        return `<tr>
+        const typeClass = a.type === 'page' ? 'type-page' : 'type-article';
+        const typeLabel = a.type === 'page' ? 'Page' : 'Article';
+        const rowClass = (a.status === 'non_pertinent' || a.status === 'deja_existant') ? `row-${a.status}` : '';
+        return `<tr class="${rowClass}">
             <td>${realIdx + 1}</td>
             <td><span class="site-badge ${siteClass}">${a.site}</span></td>
+            <td><span class="type-badge ${typeClass}">${typeLabel}</span></td>
             <td><strong>${a.titre}</strong></td>
             <td>${a.motcle}</td>
+            <td><input type="text" class="comment-input" value="${(a.commentaire || '').replace(/"/g, '&quot;')}" placeholder="Ajouter un commentaire..." onchange="changeComment(${realIdx}, this.value)"></td>
             <td>
                 <select class="status-select status-${a.status}" onchange="changeStatus(${realIdx}, this.value)">
                     <option value="a_faire" ${a.status === 'a_faire' ? 'selected' : ''}>À faire</option>
                     <option value="en_cours" ${a.status === 'en_cours' ? 'selected' : ''}>En cours</option>
                     <option value="publie" ${a.status === 'publie' ? 'selected' : ''}>Publié</option>
+                    <option value="deja_existant" ${a.status === 'deja_existant' ? 'selected' : ''}>Déjà existant</option>
+                    <option value="non_pertinent" ${a.status === 'non_pertinent' ? 'selected' : ''}>Non pertinent</option>
                 </select>
             </td>
             <td><input type="date" class="date-input" value="${a.date}" onchange="changeDate(${realIdx}, this.value)"></td>
@@ -333,6 +379,11 @@ function changeDate(idx, value) {
     save();
 }
 
+function changeComment(idx, value) {
+    articles[idx].commentaire = value;
+    save();
+}
+
 function deleteArticle(idx) {
     if (confirm('Supprimer cet article ?')) {
         articles.splice(idx, 1);
@@ -345,6 +396,8 @@ function openModal() {
     document.getElementById('modal-overlay').classList.add('active');
     document.getElementById('input-titre').value = '';
     document.getElementById('input-motcle').value = '';
+    document.getElementById('input-comment').value = '';
+    document.getElementById('input-type').value = 'article';
 }
 
 function closeModal() {
@@ -353,20 +406,22 @@ function closeModal() {
 
 function saveArticle() {
     const site = document.getElementById('input-site').value;
+    const type = document.getElementById('input-type').value;
     const titre = document.getElementById('input-titre').value.trim();
     const motcle = document.getElementById('input-motcle').value.trim();
+    const commentaire = document.getElementById('input-comment').value.trim();
     if (!titre) return alert('Ajoutez un titre');
-    articles.push({ site, titre, motcle, status: 'a_faire', date: '' });
+    articles.push({ site, type, titre, motcle, commentaire, status: 'a_faire', date: '' });
     save();
     closeModal();
     render();
 }
 
 function exportCSV() {
-    let csv = 'Site,Titre,Mot-clé,État,Date\n';
-    const statusLabels = { a_faire: 'À faire', en_cours: 'En cours', publie: 'Publié' };
+    let csv = 'Site,Type,Titre,Mot-clé,Commentaire,État,Date\n';
+    const statusLabels = { a_faire: 'À faire', en_cours: 'En cours', publie: 'Publié', non_pertinent: 'Non pertinent', deja_existant: 'Déjà existant' };
     articles.forEach(a => {
-        csv += `"${a.site}","${a.titre}","${a.motcle}","${statusLabels[a.status]}","${a.date}"\n`;
+        csv += `"${a.site}","${a.type || 'article'}","${a.titre}","${a.motcle}","${(a.commentaire || '').replace(/"/g, '""')}","${statusLabels[a.status]}","${a.date}"\n`;
     });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
@@ -377,6 +432,7 @@ function exportCSV() {
 
 document.getElementById('filter-site').addEventListener('change', render);
 document.getElementById('filter-status').addEventListener('change', render);
+document.getElementById('filter-type').addEventListener('change', render);
 document.getElementById('search').addEventListener('input', render);
 document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
 
