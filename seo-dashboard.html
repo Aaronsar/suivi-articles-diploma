@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Dashboard — prepamedecine.fr & afem-edu.fr</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e0e0e0; }
+
+        .header { background: linear-gradient(135deg, #1a1a3e 0%, #2d1b69 100%); padding: 24px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #c5a55a; }
+        .header h1 { color: #c5a55a; font-size: 22px; display: flex; align-items: center; gap: 10px; }
+        .header h1 span { font-size: 14px; color: #aaa; font-weight: 400; }
+        .header .date { color: #888; font-size: 13px; }
+        .nav-link { color: #c5a55a; text-decoration: none; font-size: 13px; font-weight: 600; border: 1px solid #c5a55a; padding: 6px 14px; border-radius: 6px; }
+        .nav-link:hover { background: #c5a55a; color: #1a1a3e; }
+
+        .tabs { display: flex; background: #16171f; border-bottom: 1px solid #2a2b35; padding: 0 30px; }
+        .tab { padding: 14px 28px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; color: #666; transition: all 0.2s; }
+        .tab:hover { color: #ccc; }
+        .tab.active { color: white; border-bottom-color: #c5a55a; }
+
+        .content { padding: 25px 30px; }
+
+        .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 30px; }
+        .card { background: #16171f; border-radius: 12px; padding: 20px; border: 1px solid #2a2b35; }
+        .card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; margin-bottom: 8px; }
+        .card-value { font-size: 32px; font-weight: 700; }
+        .card-sub { font-size: 12px; color: #888; margin-top: 4px; }
+        .val-green { color: #4caf50; }
+        .val-orange { color: #ff9800; }
+        .val-red { color: #f44336; }
+        .val-blue { color: #42a5f5; }
+        .val-gold { color: #c5a55a; }
+
+        .score-ring { width: 80px; height: 80px; position: relative; margin: 0 auto 8px; }
+        .score-ring svg { transform: rotate(-90deg); }
+        .score-ring circle { fill: none; stroke-width: 6; }
+        .score-ring .bg { stroke: #2a2b35; }
+        .score-ring .fg { stroke-linecap: round; transition: stroke-dashoffset 0.5s; }
+        .score-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; font-weight: 700; }
+
+        .section { margin-bottom: 30px; }
+        .section-title { font-size: 16px; font-weight: 700; margin-bottom: 15px; color: white; display: flex; align-items: center; gap: 8px; }
+        .section-title .badge { font-size: 11px; background: #2a2b35; padding: 3px 10px; border-radius: 10px; color: #888; font-weight: 400; }
+
+        table { width: 100%; border-collapse: collapse; background: #16171f; border-radius: 10px; overflow: hidden; border: 1px solid #2a2b35; }
+        th { background: #1e1f2b; color: #888; padding: 12px 15px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        td { padding: 12px 15px; border-bottom: 1px solid #1e1f2b; font-size: 13px; }
+        tr:hover { background: #1a1b25; }
+        td a { color: #42a5f5; text-decoration: none; }
+        td a:hover { text-decoration: underline; }
+
+        .status-pill { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .pill-indexed { background: rgba(76,175,80,0.15); color: #4caf50; }
+        .pill-noindex { background: rgba(244,67,54,0.15); color: #f44336; }
+        .pill-warning { background: rgba(255,152,0,0.15); color: #ff9800; }
+        .pill-ok { background: rgba(76,175,80,0.15); color: #4caf50; }
+        .pill-missing { background: rgba(244,67,54,0.15); color: #f44336; }
+        .pill-partial { background: rgba(255,152,0,0.15); color: #ff9800; }
+
+        .issue-row { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: #16171f; border: 1px solid #2a2b35; border-radius: 8px; margin-bottom: 8px; }
+        .issue-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+        .issue-content { flex: 1; }
+        .issue-title { font-weight: 600; font-size: 14px; margin-bottom: 3px; }
+        .issue-desc { font-size: 12px; color: #888; }
+        .issue-severity { font-size: 10px; padding: 2px 8px; border-radius: 8px; font-weight: 600; flex-shrink: 0; }
+        .sev-critical { background: rgba(244,67,54,0.15); color: #f44336; }
+        .sev-warning { background: rgba(255,152,0,0.15); color: #ff9800; }
+        .sev-info { background: rgba(66,165,245,0.15); color: #42a5f5; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+        .checklist-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #16171f; border: 1px solid #2a2b35; border-radius: 8px; margin-bottom: 6px; font-size: 13px; }
+        .check-ok { color: #4caf50; }
+        .check-fail { color: #f44336; }
+        .check-warn { color: #ff9800; }
+
+        .progress-mini { height: 4px; background: #2a2b35; border-radius: 2px; flex: 1; }
+        .progress-mini-fill { height: 100%; border-radius: 2px; }
+
+        .link-graph { display: flex; align-items: center; gap: 15px; padding: 16px; background: #16171f; border: 1px solid #2a2b35; border-radius: 10px; margin-bottom: 12px; }
+        .link-node { background: #2a2b35; padding: 10px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; text-align: center; min-width: 140px; }
+        .link-node.from { border: 2px solid #5b2d8e; color: #b39ddb; }
+        .link-node.from-afem { border: 2px solid #1a7a4a; color: #81c784; }
+        .link-node.to { border: 2px solid #c5a55a; color: #c5a55a; }
+        .link-arrow { color: #444; font-size: 20px; }
+        .link-type { font-size: 11px; color: #888; }
+
+        .empty-state { text-align: center; padding: 40px; color: #555; }
+
+        .site-view { display: none; }
+        .site-view.active { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>SEO Dashboard <span>prepamedecine.fr & afem-edu.fr</span></h1>
+    <div style="display:flex;gap:15px;align-items:center;">
+        <span class="date" id="current-date"></span>
+        <a href="index.html" class="nav-link">Suivi Articles</a>
+    </div>
+</div>
+
+<div class="tabs">
+    <div class="tab active" onclick="switchView('overview')">Vue globale</div>
+    <div class="tab" onclick="switchView('prepa')">prepamedecine.fr</div>
+    <div class="tab" onclick="switchView('afem')">afem-edu.fr</div>
+    <div class="tab" onclick="switchView('links')">Maillage & Liens</div>
+</div>
+
+<!-- ===================== VUE GLOBALE ===================== -->
+<div class="content">
+<div class="site-view active" id="view-overview">
+
+    <div class="overview-grid">
+        <div class="card" style="text-align:center;">
+            <div class="card-title">Score SEO global</div>
+            <div class="score-ring">
+                <svg width="80" height="80" viewBox="0 0 80 80">
+                    <circle class="bg" cx="40" cy="40" r="35"/>
+                    <circle class="fg" cx="40" cy="40" r="35" stroke="#ff9800"
+                        stroke-dasharray="220" stroke-dashoffset="88"/>
+                </svg>
+                <div class="score-text val-orange">60</div>
+            </div>
+            <div class="card-sub">Sur 100 — Améliorable</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Pages indexées</div>
+            <div class="card-value val-gold">~15</div>
+            <div class="card-sub">7 prepamedecine + 8 afem</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Articles publiés</div>
+            <div class="card-value val-blue">1</div>
+            <div class="card-sub">PASS vs LAS (prepamedecine.fr)</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Problèmes détectés</div>
+            <div class="card-value val-red">12</div>
+            <div class="card-sub">4 critiques · 5 warnings · 3 infos</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Liens vers Diploma Santé</div>
+            <div class="card-value val-green">3+</div>
+            <div class="card-sub">Depuis les 2 satellites</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Problèmes prioritaires</div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔴</div>
+            <div class="issue-content">
+                <div class="issue-title">Très peu de contenu / articles (les 2 sites)</div>
+                <div class="issue-desc">prepamedecine.fr a ~7 pages, afem-edu.fr a ~8 pages. Trop peu pour que Google considère ces sites comme des autorités thématiques. Objectif : 30+ pages par site.</div>
+            </div>
+            <span class="issue-severity sev-critical">CRITIQUE</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔴</div>
+            <div class="issue-content">
+                <div class="issue-title">Pas de sitemap.xml (prepamedecine.fr)</div>
+                <div class="issue-desc">Aucun sitemap détecté. Google ne peut pas découvrir efficacement vos pages. Créez un sitemap.xml et soumettez-le à Google Search Console.</div>
+            </div>
+            <span class="issue-severity sev-critical">CRITIQUE</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔴</div>
+            <div class="issue-content">
+                <div class="issue-title">Pas de robots.txt (prepamedecine.fr)</div>
+                <div class="issue-desc">Le fichier robots.txt n'existe pas. Google utilise ce fichier pour comprendre la structure de votre site.</div>
+            </div>
+            <span class="issue-severity sev-critical">CRITIQUE</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔴</div>
+            <div class="issue-content">
+                <div class="issue-title">Pas de Schema markup (prepamedecine.fr)</div>
+                <div class="issue-desc">Aucun JSON-LD/Schema détecté. Ajoutez au minimum Organization + FAQPage pour améliorer l'affichage dans les résultats Google.</div>
+            </div>
+            <span class="issue-severity sev-critical">CRITIQUE</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🟡</div>
+            <div class="issue-content">
+                <div class="issue-title">Meta descriptions manquantes ou génériques</div>
+                <div class="issue-desc">Certaines pages n'ont pas de meta description optimisée. Chaque page doit avoir une description unique de 150-160 caractères avec le mot-clé cible.</div>
+            </div>
+            <span class="issue-severity sev-warning">WARNING</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🟡</div>
+            <div class="issue-content">
+                <div class="issue-title">Alt text manquants sur les images (les 2 sites)</div>
+                <div class="issue-desc">Les images n'ont pas d'attribut alt descriptif. Impact sur l'accessibilité et le SEO images.</div>
+            </div>
+            <span class="issue-severity sev-warning">WARNING</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🟡</div>
+            <div class="issue-content">
+                <div class="issue-title">URLs en /index.php/ (prepamedecine.fr)</div>
+                <div class="issue-desc">Les URLs contiennent /index.php/ (ex: /index.php/diploma-sante/). Configurez les permaliens WordPress pour avoir des URLs propres (/diploma-sante/).</div>
+            </div>
+            <span class="issue-severity sev-warning">WARNING</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🟡</div>
+            <div class="issue-content">
+                <div class="issue-title">Pas de blog actif (afem-edu.fr)</div>
+                <div class="issue-desc">La section blog existe dans le menu mais pas de contenu régulier détecté. Publiez 2-3 articles par semaine minimum.</div>
+            </div>
+            <span class="issue-severity sev-warning">WARNING</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🟡</div>
+            <div class="issue-content">
+                <div class="issue-title">1 seul article publié (prepamedecine.fr)</div>
+                <div class="issue-desc">Seul "PASS ou LAS : quelles différences ?" est un vrai article. Les autres pages sont des fiches prépas. Il faut du contenu éditorial régulier.</div>
+            </div>
+            <span class="issue-severity sev-warning">WARNING</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔵</div>
+            <div class="issue-content">
+                <div class="issue-title">Schema Organization présent sur afem-edu.fr</div>
+                <div class="issue-desc">Bon point : le schema Organization est correctement implémenté sur afem-edu.fr. À reproduire sur prepamedecine.fr.</div>
+            </div>
+            <span class="issue-severity sev-info">OK</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔵</div>
+            <div class="issue-content">
+                <div class="issue-title">Page Diploma Santé bien optimisée (afem-edu.fr)</div>
+                <div class="issue-desc">La page /prepa-diploma-sante/ fait ~2300 mots avec un bon title tag et du maillage interne. Bonne base.</div>
+            </div>
+            <span class="issue-severity sev-info">OK</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔵</div>
+            <div class="issue-content">
+                <div class="issue-title">Maillage interne vers Diploma Santé en place</div>
+                <div class="issue-desc">Les 2 sites font bien des liens vers diploma-sante.fr. Continuez à renforcer avec les nouveaux articles.</div>
+            </div>
+            <span class="issue-severity sev-info">OK</span>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== PREPAMEDECINE.FR ===================== -->
+<div class="site-view" id="view-prepa">
+    <div class="overview-grid">
+        <div class="card" style="text-align:center;">
+            <div class="card-title">Score SEO</div>
+            <div class="score-ring">
+                <svg width="80" height="80" viewBox="0 0 80 80">
+                    <circle class="bg" cx="40" cy="40" r="35"/>
+                    <circle class="fg" cx="40" cy="40" r="35" stroke="#f44336"
+                        stroke-dasharray="220" stroke-dashoffset="110"/>
+                </svg>
+                <div class="score-text val-red">50</div>
+            </div>
+            <div class="card-sub">Beaucoup à améliorer</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Pages indexées Google</div>
+            <div class="card-value val-orange">7</div>
+            <div class="card-sub">Objectif : 30+</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Articles blog</div>
+            <div class="card-value val-red">1</div>
+            <div class="card-sub">25 prévus sur le planning</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Problèmes</div>
+            <div class="card-value val-red">7</div>
+            <div class="card-sub">3 critiques · 4 warnings</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Pages indexées <span class="badge">7 pages</span></div>
+        <table>
+            <thead>
+                <tr><th>URL</th><th>Type</th><th>Titre</th><th>Index</th><th>Meta desc</th><th>Schema</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="https://www.prepamedecine.fr" target="_blank">/</a></td>
+                    <td>Page</td>
+                    <td>Accueil — Comparateur prépas</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">Partielle</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.prepamedecine.fr/index.php/prepas/" target="_blank">/prepas/</a></td>
+                    <td>Page</td>
+                    <td>Annuaire des prépas</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">Partielle</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.prepamedecine.fr/index.php/diploma-sante/" target="_blank">/diploma-sante/</a></td>
+                    <td>Fiche</td>
+                    <td>Diploma Santé — Prépa Médecine</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">Partielle</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.prepamedecine.fr/index.php/antemed-epsilon/" target="_blank">/antemed-epsilon/</a></td>
+                    <td>Fiche</td>
+                    <td>Antémed Epsilon — Prépa Médecine</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">Partielle</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.prepamedecine.fr/index.php/medisup/" target="_blank">/medisup/</a></td>
+                    <td>Fiche</td>
+                    <td>Médisup — Prépa Médecine</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">Partielle</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.prepamedecine.fr/index.php/biomedal/" target="_blank">/biomedal/</a></td>
+                    <td>Fiche</td>
+                    <td>BIOMEDAL — Prépa Médecine</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">Partielle</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.prepamedecine.fr/index.php/medschool/" target="_blank">/medschool/</a></td>
+                    <td>Fiche</td>
+                    <td>MedSchool — Prépa Médecine</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">Partielle</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.prepamedecine.fr/index.php/pass-ou-las-quelles-differences/" target="_blank">/pass-ou-las.../</a></td>
+                    <td>Article</td>
+                    <td>PASS ou LAS : quelles différences ?</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">?</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Checklist technique</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> Sitemap.xml — non trouvé (404)</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> Robots.txt — non trouvé (404)</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> Schema JSON-LD — absent</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> URLs propres — contiennent /index.php/</div>
+        <div class="checklist-item"><span class="check-warn">⚠</span> Meta descriptions — partielles ou génériques</div>
+        <div class="checklist-item"><span class="check-warn">⚠</span> Alt text images — manquants</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> HTTPS — actif</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Mobile responsive — oui</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Lien vers Diploma Santé — présent (fiche dédiée)</div>
+    </div>
+</div>
+
+<!-- ===================== AFEM-EDU.FR ===================== -->
+<div class="site-view" id="view-afem">
+    <div class="overview-grid">
+        <div class="card" style="text-align:center;">
+            <div class="card-title">Score SEO</div>
+            <div class="score-ring">
+                <svg width="80" height="80" viewBox="0 0 80 80">
+                    <circle class="bg" cx="40" cy="40" r="35"/>
+                    <circle class="fg" cx="40" cy="40" r="35" stroke="#ff9800"
+                        stroke-dasharray="220" stroke-dashoffset="66"/>
+                </svg>
+                <div class="score-text val-orange">70</div>
+            </div>
+            <div class="card-sub">Correct, à renforcer</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Pages indexées Google</div>
+            <div class="card-value val-orange">8</div>
+            <div class="card-sub">Objectif : 30+</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Articles blog</div>
+            <div class="card-value val-red">0</div>
+            <div class="card-sub">25 prévus sur le planning</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Problèmes</div>
+            <div class="card-value val-orange">5</div>
+            <div class="card-sub">1 critique · 3 warnings · 1 ok</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Pages indexées <span class="badge">8 pages</span></div>
+        <table>
+            <thead>
+                <tr><th>URL</th><th>Type</th><th>Titre</th><th>Index</th><th>Meta desc</th><th>Schema</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="https://www.afem-edu.fr" target="_blank">/</a></td>
+                    <td>Page</td>
+                    <td>Accueil — AFEM</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-ok">OK</span></td>
+                    <td><span class="pill-ok">Organization</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.afem-edu.fr/qui-sommes-nous/" target="_blank">/qui-sommes-nous/</a></td>
+                    <td>Page</td>
+                    <td>Qui sommes nous — AFEM</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">Partielle</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.afem-edu.fr/services/" target="_blank">/services/</a></td>
+                    <td>Page</td>
+                    <td>Le simulateur Parcoursup</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">Partielle</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.afem-edu.fr/le-simulateur-parcoursup-maxence/" target="_blank">/simulateur-maxence/</a></td>
+                    <td>Outil</td>
+                    <td>Simulateur Parcoursup (Maxence)</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">?</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.afem-edu.fr/le-simulateur-parcoursup-hors-idf/" target="_blank">/simulateur-hors-idf/</a></td>
+                    <td>Outil</td>
+                    <td>Simulateur Parcoursup (META)</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">?</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.afem-edu.fr/le-qcm/" target="_blank">/le-qcm/</a></td>
+                    <td>Outil</td>
+                    <td>Le QCM — AFEM</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">?</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.afem-edu.fr/lot-fiches-de-cours-pass-las/" target="_blank">/cours-pass-las/</a></td>
+                    <td>Page</td>
+                    <td>Cours PASS/LAS — AFEM</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-warning">?</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.afem-edu.fr/prepa-diploma-sante/" target="_blank">/prepa-diploma-sante/</a></td>
+                    <td>Page</td>
+                    <td>Diploma Santé : Avis Prépa</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-ok">OK</span></td>
+                    <td><span class="pill-missing">Absent</span></td>
+                </tr>
+                <tr>
+                    <td><a href="https://www.afem-edu.fr/mentions-legales/" target="_blank">/mentions-legales/</a></td>
+                    <td>Legal</td>
+                    <td>Mentions Légales</td>
+                    <td><span class="pill-indexed">Indexée</span></td>
+                    <td><span class="pill-missing">N/A</span></td>
+                    <td><span class="pill-missing">N/A</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Checklist technique</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Schema Organization — présent sur la homepage</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> HTTPS — actif (certificat corrigé)</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Page Diploma Santé — ~2300 mots, bien optimisée</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Mobile responsive — oui</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Bon maillage interne — liens vers outils et pages</div>
+        <div class="checklist-item"><span class="check-warn">⚠</span> Alt text images — manquants</div>
+        <div class="checklist-item"><span class="check-warn">⚠</span> Schema FAQPage — absent (à ajouter sur les pages outils)</div>
+        <div class="checklist-item"><span class="check-warn">⚠</span> Blog — section existe mais pas de contenu régulier</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> 0 articles publiés — priorité absolue</div>
+    </div>
+</div>
+
+<!-- ===================== MAILLAGE & LIENS ===================== -->
+<div class="site-view" id="view-links">
+    <div class="section">
+        <div class="section-title">Liens actuels vers diploma-sante.fr</div>
+
+        <div class="link-graph">
+            <div class="link-node from">prepamedecine.fr<br><small>/diploma-sante/</small></div>
+            <div style="text-align:center;">
+                <div class="link-arrow">→</div>
+                <div class="link-type">Lien fiche prépa</div>
+            </div>
+            <div class="link-node to">diploma-sante.fr</div>
+        </div>
+
+        <div class="link-graph">
+            <div class="link-node from-afem">afem-edu.fr<br><small>/prepa-diploma-sante/</small></div>
+            <div style="text-align:center;">
+                <div class="link-arrow">→</div>
+                <div class="link-type">Page avis ~2300 mots</div>
+            </div>
+            <div class="link-node to">diploma-sante.fr</div>
+        </div>
+
+        <div class="link-graph">
+            <div class="link-node from-afem">afem-edu.fr<br><small>Menu principal</small></div>
+            <div style="text-align:center;">
+                <div class="link-arrow">→</div>
+                <div class="link-type">Lien navigation "Prépas"</div>
+            </div>
+            <div class="link-node to">diploma-sante.fr</div>
+        </div>
+    </div>
+
+    <div class="two-col">
+        <div class="section">
+            <div class="section-title">Stratégie de liens recommandée</div>
+            <div class="issue-row">
+                <div class="issue-icon">📝</div>
+                <div class="issue-content">
+                    <div class="issue-title">Chaque nouvel article = 1 lien vers Diploma Santé</div>
+                    <div class="issue-desc">Varier les ancres : "Diploma Santé", "prépa médecine Paris", "notre avis", lien URL brut. Ne pas toujours linker vers la homepage — varier les pages cibles (/prepa-pass/, /terminale-sante/, etc.)</div>
+                </div>
+            </div>
+            <div class="issue-row">
+                <div class="issue-icon">🔗</div>
+                <div class="issue-content">
+                    <div class="issue-title">Croiser les liens entre les 2 satellites</div>
+                    <div class="issue-desc">prepamedecine.fr et afem-edu.fr peuvent se lier entre eux de manière naturelle (ex: "selon l'AFEM..." depuis prepamedecine.fr). Ça renforce les deux.</div>
+                </div>
+            </div>
+            <div class="issue-row">
+                <div class="issue-icon">🎯</div>
+                <div class="issue-content">
+                    <div class="issue-title">Distribution des ancres recommandée</div>
+                    <div class="issue-desc">40% "Diploma Santé" (marque) · 20% "prépa médecine Paris" (exact) · 20% phrase naturelle · 10% "en savoir plus" (générique) · 10% URL brut</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Objectifs à 3 mois</div>
+            <div class="checklist-item">
+                <span class="check-warn">○</span>
+                <span>50 articles publiés (25 par site)</span>
+                <div class="progress-mini"><div class="progress-mini-fill" style="width:2%;background:#ff9800;"></div></div>
+                <span style="color:#888;font-size:11px;">1/50</span>
+            </div>
+            <div class="checklist-item">
+                <span class="check-warn">○</span>
+                <span>30+ pages indexées par site</span>
+                <div class="progress-mini"><div class="progress-mini-fill" style="width:25%;background:#ff9800;"></div></div>
+                <span style="color:#888;font-size:11px;">~15/60</span>
+            </div>
+            <div class="checklist-item">
+                <span class="check-warn">○</span>
+                <span>Sitemap + robots.txt sur prepamedecine.fr</span>
+                <div class="progress-mini"><div class="progress-mini-fill" style="width:0%;background:#f44336;"></div></div>
+                <span style="color:#888;font-size:11px;">0/2</span>
+            </div>
+            <div class="checklist-item">
+                <span class="check-warn">○</span>
+                <span>Schema markup sur toutes les pages</span>
+                <div class="progress-mini"><div class="progress-mini-fill" style="width:8%;background:#ff9800;"></div></div>
+                <span style="color:#888;font-size:11px;">1/15</span>
+            </div>
+            <div class="checklist-item">
+                <span class="check-warn">○</span>
+                <span>50+ liens vers diploma-sante.fr</span>
+                <div class="progress-mini"><div class="progress-mini-fill" style="width:6%;background:#ff9800;"></div></div>
+                <span style="color:#888;font-size:11px;">3/50</span>
+            </div>
+            <div class="checklist-item">
+                <span class="check-warn">○</span>
+                <span>Corriger les URLs /index.php/</span>
+                <div class="progress-mini"><div class="progress-mini-fill" style="width:0%;background:#f44336;"></div></div>
+                <span style="color:#888;font-size:11px;">0/7</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+document.getElementById('current-date').textContent = 'Dernière analyse : ' + new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+function switchView(view) {
+    document.querySelectorAll('.site-view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
