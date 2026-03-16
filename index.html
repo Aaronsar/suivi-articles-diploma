@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi Articles — Diploma Santé</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f0f5; color: #1a1a3e; }
+
+        .header { background: #1a1a3e; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { color: #c5a55a; font-size: 20px; }
+        .header .stats { display: flex; gap: 20px; }
+        .header .stat { text-align: center; color: white; }
+        .header .stat .num { font-size: 24px; font-weight: bold; color: #c5a55a; }
+        .header .stat .label { font-size: 11px; opacity: 0.7; }
+
+        .toolbar { padding: 15px 30px; background: white; border-bottom: 1px solid #ddd; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .toolbar select, .toolbar input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; }
+        .toolbar input { width: 250px; }
+        .toolbar button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .btn-add { background: #c5a55a; color: white; }
+        .btn-add:hover { background: #b3944e; }
+        .btn-export { background: #1a1a3e; color: white; }
+        .btn-export:hover { background: #2a2a5e; }
+
+        .table-wrap { padding: 20px 30px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th { background: #1a1a3e; color: white; padding: 12px 15px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { padding: 10px 15px; border-bottom: 1px solid #f0f0f5; font-size: 13px; }
+        tr:hover { background: #f8f8fc; }
+
+        .site-badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+        .site-prepamedecine { background: #e8e0f0; color: #5b2d8e; }
+        .site-afem { background: #dff0e8; color: #1a7a4a; }
+
+        .status-select { padding: 5px 10px; border-radius: 15px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; appearance: none; -webkit-appearance: none; text-align: center; }
+        .status-a_faire { background: #fff3e0; color: #e65100; }
+        .status-en_cours { background: #e3f2fd; color: #1565c0; }
+        .status-publie { background: #e8f5e9; color: #2e7d32; }
+
+        .date-input { border: 1px solid #ddd; border-radius: 4px; padding: 4px 8px; font-size: 12px; width: 130px; }
+        .date-input:empty::before { content: '—'; color: #ccc; }
+
+        .delete-btn { background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.3; }
+        .delete-btn:hover { opacity: 1; color: #e53935; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 12px; padding: 30px; width: 450px; max-width: 90vw; }
+        .modal h2 { margin-bottom: 20px; color: #1a1a3e; font-size: 18px; }
+        .modal label { display: block; margin-bottom: 4px; font-size: 12px; font-weight: 600; color: #666; }
+        .modal input, .modal select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 15px; font-size: 14px; }
+        .modal .modal-btns { display: flex; gap: 10px; justify-content: flex-end; }
+        .modal .modal-btns button { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .modal .btn-cancel { background: #eee; color: #666; }
+        .modal .btn-save { background: #c5a55a; color: white; }
+
+        .progress-bar { width: 100%; height: 6px; background: #eee; border-radius: 3px; margin-top: 8px; }
+        .progress-fill { height: 100%; background: #c5a55a; border-radius: 3px; transition: width 0.3s; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Suivi Articles — Diploma Santé</h1>
+    <div class="stats">
+        <div class="stat"><div class="num" id="stat-total">50</div><div class="label">TOTAL</div></div>
+        <div class="stat"><div class="num" id="stat-todo">50</div><div class="label">À FAIRE</div></div>
+        <div class="stat"><div class="num" id="stat-encours">0</div><div class="label">EN COURS</div></div>
+        <div class="stat"><div class="num" id="stat-publie">0</div><div class="label">PUBLIÉS</div></div>
+        <div class="stat">
+            <div class="num" id="stat-percent">0%</div>
+            <div class="label">PROGRESSION</div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+        </div>
+    </div>
+</div>
+
+<div class="toolbar">
+    <select id="filter-site">
+        <option value="">Tous les sites</option>
+        <option value="prepamedecine.fr">prepamedecine.fr</option>
+        <option value="afem-edu.fr">afem-edu.fr</option>
+    </select>
+    <select id="filter-status">
+        <option value="">Tous les états</option>
+        <option value="a_faire">À faire</option>
+        <option value="en_cours">En cours</option>
+        <option value="publie">Publié</option>
+    </select>
+    <input type="text" id="search" placeholder="Rechercher un article...">
+    <button class="btn-add" onclick="openModal()">+ Ajouter un article</button>
+    <button class="btn-export" onclick="exportCSV()">Exporter CSV</button>
+</div>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Site</th>
+                <th>Nom de l'article</th>
+                <th>Mot-clé ciblé</th>
+                <th>État</th>
+                <th>Date de publication</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+        <h2 id="modal-title">Ajouter un article</h2>
+        <label>Site</label>
+        <select id="input-site">
+            <option value="prepamedecine.fr">prepamedecine.fr</option>
+            <option value="afem-edu.fr">afem-edu.fr</option>
+        </select>
+        <label>Nom de l'article</label>
+        <input type="text" id="input-titre" placeholder="Titre de l'article">
+        <label>Mot-clé ciblé</label>
+        <input type="text" id="input-motcle" placeholder="Mot-clé SEO">
+        <div class="modal-btns">
+            <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+            <button class="btn-save" onclick="saveArticle()">Ajouter</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const DEFAULT_ARTICLES = [
+    { site: "prepamedecine.fr", titre: "Classement des meilleures prépas médecine à Paris en 2026", motcle: "classement prépa médecine paris", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Prépa médecine : comparatif des prix à Paris", motcle: "prépa médecine prix", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Prépa PASS ou prépa LAS : laquelle choisir ?", motcle: "prépa PASS ou LAS", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Top 5 des prépas médecine en Île-de-France", motcle: "prépa médecine ile de france", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Prépa médecine en ligne vs présentiel : le vrai comparatif", motcle: "prépa médecine en ligne", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Réussir le PASS du premier coup : le guide complet", motcle: "réussir PASS premier coup", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Programme PASS 2026 : toutes les matières détaillées", motcle: "programme PASS 2026", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "PASS Sorbonne Université : programme, taux, conseils", motcle: "PASS sorbonne université", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "PASS Paris Cité 2026 : tout ce qu'il faut savoir", motcle: "PASS paris cité", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "PASS Paris-Saclay : guide complet", motcle: "PASS paris saclay", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "PASS UPEC Créteil : programme et taux de réussite", motcle: "PASS UPEC créteil", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "QCM PASS : comment s'entraîner efficacement", motcle: "QCM PASS entraînement", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Oraux PASS 2026 : comment les préparer", motcle: "oraux PASS préparation", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Tout savoir sur la LAS : fonctionnement et stratégie", motcle: "LAS médecine", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Quelle licence choisir pour la LAS ?", motcle: "quelle licence LAS", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "LAS 2 et LAS 3 : retenter médecine en L2 ou L3", motcle: "LAS 2 LAS 3 médecine", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Parcoursup médecine 2026 : calendrier et conseils", motcle: "parcoursup médecine 2026", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Lettre de motivation Parcoursup PASS : exemple", motcle: "lettre motivation parcoursup PASS", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Quelles spécialités choisir au lycée pour médecine ?", motcle: "spécialités lycée médecine", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "MMOPK : quelle filière choisir ?", motcle: "filière MMOPK choix", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Comment réviser en PASS : les 10 méthodes", motcle: "comment réviser PASS", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Planning de révision PASS semaine par semaine", motcle: "planning révision PASS", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Les erreurs qui font échouer en 1ère année", motcle: "erreurs première année médecine", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Combien d'heures de travail par jour en PASS ?", motcle: "heures travail PASS par jour", status: "a_faire", date: "" },
+    { site: "prepamedecine.fr", titre: "Annales PASS : où les trouver et comment les utiliser", motcle: "annales PASS", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Budget étudiant en médecine à Paris", motcle: "budget étudiant médecine paris", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Logement étudiant médecine Paris : les quartiers", motcle: "logement étudiant médecine paris", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Bourse et aides financières pour le PASS", motcle: "bourse étudiant PASS", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Stress en 1ère année de médecine : comment le gérer", motcle: "stress première année médecine", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Témoignage : comment j'ai réussi mon PASS", motcle: "témoignage réussite PASS", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Fac de médecine Sorbonne : tout savoir", motcle: "fac médecine sorbonne", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Fac de médecine Paris Cité : programme et avis", motcle: "fac médecine paris cité", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Fac de médecine Créteil UPEC : le guide", motcle: "fac médecine créteil", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "UVSQ : la réforme LSPS 2026 expliquée", motcle: "LSPS UVSQ 2026", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Médecine Bobigny Sorbonne Paris Nord", motcle: "médecine bobigny", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Je suis en terminale et je veux faire médecine", motcle: "terminale faire médecine", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Préparer médecine dès la première : utile ou pas ?", motcle: "première santé préparer médecine", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Moyenne au bac pour entrer en médecine", motcle: "moyenne bac médecine", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Réussir médecine sans être premier de classe", motcle: "réussir médecine sans être premier", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "JPO médecine Paris 2026 : toutes les dates", motcle: "JPO médecine paris 2026", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Numerus apertus 2026 : combien de places ?", motcle: "numerus apertus 2026", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Redoublement PASS : c'est possible ou pas ?", motcle: "redoublement PASS", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Passerelle médecine : entrer sans PASS", motcle: "passerelle médecine sans PASS", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Études de médecine à l'étranger : les alternatives", motcle: "études médecine étranger", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Réforme études de santé : ce qui a changé", motcle: "réforme études santé", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Simulateur Parcoursup PASS/LAS : mode d'emploi", motcle: "simulateur parcoursup PASS", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "QCM PASS gratuit : teste ton niveau", motcle: "QCM PASS gratuit", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Calculer ses chances de réussite en PASS", motcle: "chances réussite PASS", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Les 20 questions les plus posées sur le PASS", motcle: "questions PASS fréquentes", status: "a_faire", date: "" },
+    { site: "afem-edu.fr", titre: "Kit de survie première année de médecine", motcle: "kit survie première année médecine", status: "a_faire", date: "" },
+];
+
+let articles = JSON.parse(localStorage.getItem('diploma_articles')) || [...DEFAULT_ARTICLES];
+
+function save() {
+    localStorage.setItem('diploma_articles', JSON.stringify(articles));
+}
+
+function updateStats() {
+    const total = articles.length;
+    const todo = articles.filter(a => a.status === 'a_faire').length;
+    const encours = articles.filter(a => a.status === 'en_cours').length;
+    const publie = articles.filter(a => a.status === 'publie').length;
+    const pct = total ? Math.round((publie / total) * 100) : 0;
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-todo').textContent = todo;
+    document.getElementById('stat-encours').textContent = encours;
+    document.getElementById('stat-publie').textContent = publie;
+    document.getElementById('stat-percent').textContent = pct + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function render() {
+    const filterSite = document.getElementById('filter-site').value;
+    const filterStatus = document.getElementById('filter-status').value;
+    const search = document.getElementById('search').value.toLowerCase();
+
+    const filtered = articles.filter(a => {
+        if (filterSite && a.site !== filterSite) return false;
+        if (filterStatus && a.status !== filterStatus) return false;
+        if (search && !a.titre.toLowerCase().includes(search) && !a.motcle.toLowerCase().includes(search)) return false;
+        return true;
+    });
+
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = filtered.map((a, idx) => {
+        const realIdx = articles.indexOf(a);
+        const siteClass = a.site === 'prepamedecine.fr' ? 'site-prepamedecine' : 'site-afem';
+        const statusLabels = { a_faire: 'À faire', en_cours: 'En cours', publie: 'Publié' };
+        return `<tr>
+            <td>${realIdx + 1}</td>
+            <td><span class="site-badge ${siteClass}">${a.site}</span></td>
+            <td><strong>${a.titre}</strong></td>
+            <td>${a.motcle}</td>
+            <td>
+                <select class="status-select status-${a.status}" onchange="changeStatus(${realIdx}, this.value)">
+                    <option value="a_faire" ${a.status === 'a_faire' ? 'selected' : ''}>À faire</option>
+                    <option value="en_cours" ${a.status === 'en_cours' ? 'selected' : ''}>En cours</option>
+                    <option value="publie" ${a.status === 'publie' ? 'selected' : ''}>Publié</option>
+                </select>
+            </td>
+            <td><input type="date" class="date-input" value="${a.date}" onchange="changeDate(${realIdx}, this.value)"></td>
+            <td><button class="delete-btn" onclick="deleteArticle(${realIdx})">✕</button></td>
+        </tr>`;
+    }).join('');
+
+    updateStats();
+}
+
+function changeStatus(idx, value) {
+    articles[idx].status = value;
+    if (value === 'publie' && !articles[idx].date) {
+        articles[idx].date = new Date().toISOString().split('T')[0];
+    }
+    save();
+    render();
+}
+
+function changeDate(idx, value) {
+    articles[idx].date = value;
+    save();
+}
+
+function deleteArticle(idx) {
+    if (confirm('Supprimer cet article ?')) {
+        articles.splice(idx, 1);
+        save();
+        render();
+    }
+}
+
+function openModal() {
+    document.getElementById('modal-overlay').classList.add('active');
+    document.getElementById('input-titre').value = '';
+    document.getElementById('input-motcle').value = '';
+}
+
+function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('active');
+}
+
+function saveArticle() {
+    const site = document.getElementById('input-site').value;
+    const titre = document.getElementById('input-titre').value.trim();
+    const motcle = document.getElementById('input-motcle').value.trim();
+    if (!titre) return alert('Ajoutez un titre');
+    articles.push({ site, titre, motcle, status: 'a_faire', date: '' });
+    save();
+    closeModal();
+    render();
+}
+
+function exportCSV() {
+    let csv = 'Site,Titre,Mot-clé,État,Date\n';
+    const statusLabels = { a_faire: 'À faire', en_cours: 'En cours', publie: 'Publié' };
+    articles.forEach(a => {
+        csv += `"${a.site}","${a.titre}","${a.motcle}","${statusLabels[a.status]}","${a.date}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'suivi_articles_diploma.csv';
+    link.click();
+}
+
+document.getElementById('filter-site').addEventListener('change', render);
+document.getElementById('filter-status').addEventListener('change', render);
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+render();
+</script>
+</body>
+</html>
