@@ -134,6 +134,7 @@
     <div class="tab active" onclick="switchView('overview')">Vue globale</div>
     <div class="tab" onclick="switchView('prepa')">prepamedecine.fr</div>
     <div class="tab" onclick="switchView('afem')">afem-edu.fr</div>
+    <div class="tab" onclick="switchView('diploma')">diploma-sante.fr</div>
     <div class="tab" onclick="switchView('links')">Maillage & Liens</div>
 </div>
 
@@ -164,18 +165,18 @@
         </div>
         <div class="card">
             <div class="card-title">Pages sur les sites</div>
-            <div class="card-value val-gold">~156</div>
-            <div class="card-sub">73 prepamedecine + 83 afem</div>
+            <div class="card-value val-gold">~181</div>
+            <div class="card-sub">25 diploma + 73 prepa + 83 afem</div>
         </div>
         <div class="card">
             <div class="card-title">Indexées par Google</div>
-            <div class="card-value val-orange">~8</div>
-            <div class="card-sub">0 prepa (anciennes 404) + 8 afem</div>
+            <div class="card-value val-orange">~33</div>
+            <div class="card-sub">25 diploma + 0 prepa + 8 afem</div>
         </div>
         <div class="card">
             <div class="card-title">Taux d'indexation</div>
-            <div class="card-value val-red">5%</div>
-            <div class="card-sub">En attente du crawl Google</div>
+            <div class="card-value val-red">18%</div>
+            <div class="card-sub">En attente du crawl Google (satellites)</div>
         </div>
         <div class="card">
             <div class="card-title">Articles écrits</div>
@@ -189,7 +190,18 @@
         </div>
     </div>
 
-    <div class="stats-comparison">
+    <div class="stats-comparison" style="grid-template-columns: 1fr auto 1fr auto 1fr;">
+        <div class="stats-side">
+            <h3 style="color:#c5a55a;">diploma-sante.fr</h3>
+            <div class="stats-row"><span class="stats-label">Pages existantes</span> <strong>~25+</strong></div>
+            <div class="stats-row"><span class="stats-label">Indexées Google</span> <strong class="val-green">~25+</strong></div>
+            <div class="stats-row"><span class="stats-label">Pages prépas</span> <strong>9</strong></div>
+            <div class="stats-row"><span class="stats-label">Pages universités</span> <strong>10</strong></div>
+            <div class="stats-row"><span class="stats-label">Sitemap</span> <strong class="val-red">Non</strong></div>
+            <div class="stats-row"><span class="stats-label">Schema</span> <strong class="val-red">Non</strong></div>
+            <div class="stats-row"><span class="stats-label">Blog/Articles</span> <strong class="val-red">Non</strong></div>
+        </div>
+        <div class="stats-divider"></div>
         <div class="stats-side">
             <h3>prepamedecine.fr</h3>
             <div class="stats-row"><span class="stats-label">Pages existantes</span> <strong>73</strong></div>
@@ -198,9 +210,7 @@
             <div class="stats-row"><span class="stats-label">Pages villes</span> <strong>24</strong></div>
             <div class="stats-row"><span class="stats-label">Fiches prépas</span> <strong>31</strong></div>
             <div class="stats-row"><span class="stats-label">Sitemap</span> <strong class="val-green">Oui ✓</strong></div>
-            <div class="stats-row"><span class="stats-label">Robots.txt</span> <strong class="val-green">Oui ✓</strong></div>
             <div class="stats-row"><span class="stats-label">Schema</span> <strong class="val-red">Non</strong></div>
-            <div class="stats-row"><span class="stats-label">Liens vers Diploma</span> <strong class="val-red">Non</strong></div>
         </div>
         <div class="stats-divider"></div>
         <div class="stats-side">
@@ -212,7 +222,6 @@
             <div class="stats-row"><span class="stats-label">Fiches facultés</span> <strong>31</strong></div>
             <div class="stats-row"><span class="stats-label">Sitemap</span> <strong class="val-green">Oui ✓</strong></div>
             <div class="stats-row"><span class="stats-label">Schema</span> <strong class="val-green">Article + FAQ</strong></div>
-            <div class="stats-row"><span class="stats-label">Liens vers Diploma</span> <strong class="val-green">3+ articles</strong></div>
         </div>
     </div>
     <div style="font-size:11px;color:#666;margin-top:-15px;margin-bottom:20px;">* Les 7 anciennes URLs /index.php/ de prepamedecine.fr sont en 404. Les nouvelles pages (URLs propres) ne sont pas encore indexées — sitemap soumis, en attente du crawl.</div>
@@ -545,6 +554,207 @@
         <div class="checklist-item"><span class="check-ok">✓</span> Page Diploma Santé — ~2300 mots</div>
         <div class="checklist-item"><span class="check-warn">⚠</span> Schema pas sur tous les articles — à harmoniser</div>
         <div class="checklist-item"><span class="check-warn">⚠</span> Seulement 3 articles linkent vers Diploma — en ajouter plus</div>
+    </div>
+</div>
+
+<!-- ===================== DIPLOMA-SANTE.FR ===================== -->
+<div class="site-view" id="view-diploma">
+
+    <div class="alert-banner" style="background:rgba(197,165,90,0.1);border-color:rgba(197,165,90,0.3);">
+        <div class="alert-icon">🏥</div>
+        <div class="alert-text">
+            <div class="alert-title" style="color:#c5a55a;">Site principal — WordPress + Divi</div>
+            <div class="alert-desc">diploma-sante.fr est le site commercial principal. ~25+ pages indexées par Google. Pas de sitemap ni robots.txt détectés. 3 campus à Paris (12e et 16e).</div>
+        </div>
+    </div>
+
+    <div class="overview-grid">
+        <div class="card" style="text-align:center;">
+            <div class="card-title">Score SEO</div>
+            <div class="score-ring">
+                <svg width="80" height="80" viewBox="0 0 80 80">
+                    <circle class="bg" cx="40" cy="40" r="35"/>
+                    <circle class="fg" cx="40" cy="40" r="35" stroke="#ff9800"
+                        stroke-dasharray="220" stroke-dashoffset="66"/>
+                </svg>
+                <div class="score-text val-orange">70</div>
+            </div>
+            <div class="card-sub">Bon contenu, technique à améliorer</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Pages indexées Google</div>
+            <div class="card-value val-green">~25+</div>
+            <div class="card-sub">8 principales + 9 prépas + 10 universités</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Problèmes SEO</div>
+            <div class="card-value val-orange">3</div>
+            <div class="card-sub">Sitemap, robots.txt, Schema</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Technologie</div>
+            <div class="card-value val-blue" style="font-size:24px;">WordPress</div>
+            <div class="card-sub">Thème Divi · WPRocket</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Pages indexées par Google <span class="badge-green">~25+ pages</span></div>
+        <table>
+            <thead>
+                <tr><th>URL</th><th>Type</th><th>Titre</th><th>Index</th></tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="4" style="background:#1e1f2b;color:#c5a55a;font-weight:600;font-size:12px;letter-spacing:1px;">PAGES PRINCIPALES</td></tr>
+                <tr><td><a href="https://diploma-sante.fr/" target="_blank">/</a></td><td>Homepage</td><td>Prépa médecine d'excellence à Paris</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/notre-savoir-faire/" target="_blank">/notre-savoir-faire/</a></td><td>Page</td><td>Notre savoir-faire</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/nos-campus/" target="_blank">/nos-campus/</a></td><td>Page</td><td>Nos campus</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/etudes-de-sante/" target="_blank">/etudes-de-sante/</a></td><td>Page</td><td>Les voies d'accès aux études de santé</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/candidature/" target="_blank">/candidature/</a></td><td>Page</td><td>Candidature</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/equipe-pedagogique/" target="_blank">/equipe-pedagogique/</a></td><td>Page</td><td>Équipe pédagogique</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/meilleure-prepa-medecine/" target="_blank">/meilleure-prepa-medecine/</a></td><td>SEO</td><td>La meilleure prépa médecine</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/mentions-legales/" target="_blank">/mentions-legales/</a></td><td>Légal</td><td>Mentions légales</td><td><span class="pill-indexed">Indexée</span></td></tr>
+
+                <tr><td colspan="4" style="background:#1e1f2b;color:#42a5f5;font-weight:600;font-size:12px;letter-spacing:1px;">PRÉPARATIONS</td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/" target="_blank">/preparations/</a></td><td>Hub</td><td>Nos différentes préparations</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-pass/" target="_blank">/preparations/prepa-pass/</a></td><td>Prépa</td><td>Prépa PASS</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-las/" target="_blank">/preparations/prepa-las/</a></td><td>Prépa</td><td>Prépa LAS</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-lsps/" target="_blank">/preparations/prepa-lsps/</a></td><td>Prépa</td><td>Prépa LSPS</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/terminale-sante/" target="_blank">/preparations/terminale-sante/</a></td><td>Prépa</td><td>Terminale Santé</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/prepa-terminale" target="_blank">/prepa-terminale</a></td><td>Prépa</td><td>La prépa terminale</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/premiere-sante/" target="_blank">/premiere-sante/</a></td><td>Prépa</td><td>Première Élite</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/premiere-elite/" target="_blank">/preparations/premiere-elite/</a></td><td>Prépa</td><td>Prépa Première Élite</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/apes0" target="_blank">/apes0</a></td><td>Prépa</td><td>APES0 — Année préparatoire</td><td><span class="pill-indexed">Indexée</span></td></tr>
+
+                <tr><td colspan="4" style="background:#1e1f2b;color:#81c784;font-weight:600;font-size:12px;letter-spacing:1px;">PAGES PAR UNIVERSITÉ</td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-pass/prepa-sorbonne-universite/" target="_blank">/prepa-pass/prepa-sorbonne-universite/</a></td><td>Univ.</td><td>PASS Sorbonne Université</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-las/sorbonne-universite/" target="_blank">/prepa-las/sorbonne-universite/</a></td><td>Univ.</td><td>LAS Sorbonne Université</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-pass/sorbonne-paris-nord/" target="_blank">/prepa-pass/sorbonne-paris-nord/</a></td><td>Univ.</td><td>PASS Sorbonne Paris Nord</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-las/sorbonne-paris-nord/" target="_blank">/prepa-las/sorbonne-paris-nord/</a></td><td>Univ.</td><td>LAS Sorbonne Paris Nord</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-lsps/sorbonne-paris-nord/" target="_blank">/prepa-lsps/sorbonne-paris-nord/</a></td><td>Univ.</td><td>LSPS Sorbonne Paris Nord</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-las/paris-saclay/" target="_blank">/prepa-las/paris-saclay/</a></td><td>Univ.</td><td>LAS Paris-Saclay</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-las/universite-paris-cite/" target="_blank">/prepa-las/universite-paris-cite/</a></td><td>Univ.</td><td>LAS Paris-Cité</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-las/universite-paris-est-creteil/" target="_blank">/prepa-las/universite-paris-est-creteil/</a></td><td>Univ.</td><td>LAS Paris-Est Créteil</td><td><span class="pill-indexed">Indexée</span></td></tr>
+                <tr><td><a href="https://diploma-sante.fr/preparations/prepa-lsps/prepa-lsps-3/" target="_blank">/prepa-lsps/prepa-lsps-3/</a></td><td>Univ.</td><td>LSPS 3 Paris-Est Créteil</td><td><span class="pill-indexed">Indexée</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Problèmes SEO</div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔴</div>
+            <div class="issue-content">
+                <div class="issue-title">Pas de sitemap.xml</div>
+                <div class="issue-desc">Le fichier sitemap.xml retourne une erreur 404. WordPress peut le générer automatiquement via Yoast SEO ou Rank Math. Indispensable pour que Google découvre toutes les pages.</div>
+            </div>
+            <span class="issue-severity sev-critical">CRITIQUE</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔴</div>
+            <div class="issue-content">
+                <div class="issue-title">Pas de robots.txt</div>
+                <div class="issue-desc">Le fichier robots.txt n'est pas détecté. WordPress le génère normalement automatiquement. Vérifier la configuration ou le créer manuellement.</div>
+            </div>
+            <span class="issue-severity sev-critical">CRITIQUE</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔴</div>
+            <div class="issue-content">
+                <div class="issue-title">Aucun Schema JSON-LD détecté</div>
+                <div class="issue-desc">Pas de données structurées (Organization, LocalBusiness, Course, FAQPage). Ajouter via un plugin WordPress comme Rank Math ou Schema Pro. Très important pour les rich snippets Google.</div>
+            </div>
+            <span class="issue-severity sev-critical">CRITIQUE</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🟡</div>
+            <div class="issue-content">
+                <div class="issue-title">Meta descriptions possiblement manquantes</div>
+                <div class="issue-desc">La meta description de la homepage n'a pas été détectée. Vérifier toutes les pages avec un plugin SEO (Yoast/Rank Math). Chaque page doit avoir une meta description unique de 150-160 caractères.</div>
+            </div>
+            <span class="issue-severity sev-warning">WARNING</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🟡</div>
+            <div class="issue-content">
+                <div class="issue-title">URLs dupliquées possibles</div>
+                <div class="issue-desc">/prepa-terminale et /preparations/terminale-sante/ semblent être deux pages similaires. /premiere-sante/ et /preparations/premiere-elite/ aussi. Risque de cannibalisation SEO — vérifier et rediriger si nécessaire.</div>
+            </div>
+            <span class="issue-severity sev-warning">WARNING</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔵</div>
+            <div class="issue-content">
+                <div class="issue-title">Bonne couverture des mots-clés par université</div>
+                <div class="issue-desc">Les pages par université (Sorbonne, Paris-Cité, Saclay, UPEC, SPN) couvrent bien les recherches géo-ciblées comme "prépa PASS Sorbonne".</div>
+            </div>
+            <span class="issue-severity sev-done">BON</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔵</div>
+            <div class="issue-content">
+                <div class="issue-title">Contenu riche et bien structuré</div>
+                <div class="issue-desc">Pages de présentation détaillées avec stats de réussite (78% d'admission), témoignages, FAQ, et détails des formations. Bonne base de contenu.</div>
+            </div>
+            <span class="issue-severity sev-done">BON</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Checklist technique</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> HTTPS — actif</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Mobile responsive — Divi responsive</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> WordPress + Divi — CMS robuste pour le SEO</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> WPRocket — optimisation performance/cache</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> ~25+ pages indexées par Google</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Pages par université — bon ciblage géo</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Lazy loading images — activé</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> 3 campus Paris — Quai de la Rapée, Ledru-Rollin, Lauriston</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> Sitemap.xml — 404 (absent !)</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> Robots.txt — non détecté</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> Schema JSON-LD — absent (Organization, LocalBusiness, Course)</div>
+        <div class="checklist-item"><span class="check-warn">⚠</span> Meta descriptions — possiblement manquantes</div>
+        <div class="checklist-item"><span class="check-warn">⚠</span> URLs dupliquées — /prepa-terminale vs /preparations/terminale-sante/</div>
+        <div class="checklist-item"><span class="check-warn">⚠</span> Pas de blog/articles SEO — opportunité manquée pour le trafic organique</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Recommandations prioritaires</div>
+        <div class="issue-row">
+            <div class="issue-icon">1️⃣</div>
+            <div class="issue-content">
+                <div class="issue-title">Installer Rank Math SEO (plugin WordPress)</div>
+                <div class="issue-desc">Génère automatiquement sitemap.xml, robots.txt, Schema JSON-LD, et permet d'ajouter des meta descriptions. Solution tout-en-un pour résoudre les 3 problèmes critiques.</div>
+            </div>
+        </div>
+        <div class="issue-row">
+            <div class="issue-icon">2️⃣</div>
+            <div class="issue-content">
+                <div class="issue-title">Soumettre le sitemap à Google Search Console</div>
+                <div class="issue-desc">Une fois le sitemap créé, le soumettre dans la Search Console pour accélérer l'indexation de toutes les pages.</div>
+            </div>
+        </div>
+        <div class="issue-row">
+            <div class="issue-icon">3️⃣</div>
+            <div class="issue-content">
+                <div class="issue-title">Ajouter un blog avec articles SEO</div>
+                <div class="issue-desc">Créer un blog directement sur diploma-sante.fr pour capter du trafic organique sur des requêtes informatives : "réussir PASS", "choisir sa fac de médecine", "taux de réussite PASS 2026", etc.</div>
+            </div>
+        </div>
+        <div class="issue-row">
+            <div class="issue-icon">4️⃣</div>
+            <div class="issue-content">
+                <div class="issue-title">Fusionner les pages dupliquées</div>
+                <div class="issue-desc">Rediriger /prepa-terminale → /preparations/terminale-sante/ et /premiere-sante/ → /preparations/premiere-elite/ pour éviter la cannibalisation.</div>
+            </div>
+        </div>
     </div>
 </div>
 
