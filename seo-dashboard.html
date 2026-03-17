@@ -145,6 +145,7 @@
     <div class="tab" onclick="switchView('prepa')">prepamedecine.fr</div>
     <div class="tab" onclick="switchView('afem')">afem-edu.fr</div>
     <div class="tab" onclick="switchView('diploma')">diploma-sante.fr</div>
+    <div class="tab" onclick="switchView('concurrents')">⚔️ Concurrents</div>
     <div class="tab" onclick="switchView('links')">Maillage & Liens</div>
 </div>
 
@@ -213,9 +214,10 @@
             <div class="stats-row"><span class="stats-label">Indexées Google</span> <strong class="val-green">~25+</strong></div>
             <div class="stats-row"><span class="stats-label">Pages prépas</span> <strong>9</strong></div>
             <div class="stats-row"><span class="stats-label">Pages universités</span> <strong>10</strong></div>
-            <div class="stats-row"><span class="stats-label">Sitemap</span> <strong class="val-red">Non</strong></div>
-            <div class="stats-row"><span class="stats-label">Schema</span> <strong class="val-red">Non</strong></div>
-            <div class="stats-row"><span class="stats-label">Blog/Articles</span> <strong class="val-red">Non</strong></div>
+            <div class="stats-row"><span class="stats-label">Blog</span> <strong class="val-green">~20+ articles</strong></div>
+            <div class="stats-row"><span class="stats-label">Rank Math</span> <strong class="val-orange">Mal config</strong></div>
+            <div class="stats-row"><span class="stats-label">Sitemap</span> <strong class="val-red">404 !</strong></div>
+            <div class="stats-row"><span class="stats-label">Schema</span> <strong class="val-red">Absent</strong></div>
         </div>
         <div class="stats-divider"></div>
         <div class="stats-side">
@@ -591,11 +593,11 @@
         <a href="https://diploma-sante.fr" target="_blank" class="btn-admin">🌐 Voir le site</a>
     </div>
 
-    <div class="alert-banner" style="background:rgba(197,165,90,0.1);border-color:rgba(197,165,90,0.3);">
-        <div class="alert-icon">🏥</div>
+    <div class="alert-banner">
+        <div class="alert-icon">⚠️</div>
         <div class="alert-text">
-            <div class="alert-title" style="color:#c5a55a;">Site principal — WordPress + Divi</div>
-            <div class="alert-desc">diploma-sante.fr est le site commercial principal. ~25+ pages indexées par Google. Pas de sitemap ni robots.txt détectés. 3 campus à Paris (12e et 16e).</div>
+            <div class="alert-title">Rank Math installé mais MAL CONFIGURÉ — Sitemap en 404</div>
+            <div class="alert-desc">diploma-sante.fr a Rank Math SEO installé + un blog actif (~20 articles) + un robots.txt en place. MAIS le sitemap_index.xml retourne 404, le Schema JSON-LD n'est pas généré, et les meta descriptions sont absentes. Il faut reconfigurer Rank Math.</div>
         </div>
     </div>
 
@@ -618,14 +620,19 @@
             <div class="card-sub">8 principales + 9 prépas + 10 universités</div>
         </div>
         <div class="card">
+            <div class="card-title">Blog / Articles</div>
+            <div class="card-value val-green">~20+</div>
+            <div class="card-sub">Blog actif sous /blog/ + pages SEO</div>
+        </div>
+        <div class="card">
             <div class="card-title">Problèmes SEO</div>
-            <div class="card-value val-orange">3</div>
-            <div class="card-sub">Sitemap, robots.txt, Schema</div>
+            <div class="card-value val-red">4</div>
+            <div class="card-sub">Sitemap 404, Schema absent, Meta desc, H1</div>
         </div>
         <div class="card">
             <div class="card-title">Technologie</div>
             <div class="card-value val-blue" style="font-size:24px;">WordPress</div>
-            <div class="card-sub">Thème Divi · WPRocket</div>
+            <div class="card-sub">Divi · WPRocket · Rank Math (mal config)</div>
         </div>
     </div>
 
@@ -672,13 +679,13 @@
     </div>
 
     <div class="section">
-        <div class="section-title">Problèmes SEO</div>
+        <div class="section-title">Problèmes SEO <span class="badge-red">4 critiques</span></div>
 
         <div class="issue-row">
             <div class="issue-icon">🔴</div>
             <div class="issue-content">
-                <div class="issue-title">Pas de sitemap.xml</div>
-                <div class="issue-desc">Le fichier sitemap.xml retourne une erreur 404. WordPress peut le générer automatiquement via Yoast SEO ou Rank Math. Indispensable pour que Google découvre toutes les pages.</div>
+                <div class="issue-title">Sitemap en 404 — Rank Math mal configuré</div>
+                <div class="issue-desc">Rank Math est installé et le robots.txt référence sitemap_index.xml, mais ce fichier retourne 404. Aller dans Rank Math → Réglages du plan du site → activer le module. Puis Réglages → Permaliens → cliquer "Enregistrer" pour flush les rewrite rules.</div>
             </div>
             <span class="issue-severity sev-critical">CRITIQUE</span>
         </div>
@@ -686,8 +693,8 @@
         <div class="issue-row">
             <div class="issue-icon">🔴</div>
             <div class="issue-content">
-                <div class="issue-title">Pas de robots.txt</div>
-                <div class="issue-desc">Le fichier robots.txt n'est pas détecté. WordPress le génère normalement automatiquement. Vérifier la configuration ou le créer manuellement.</div>
+                <div class="issue-title">Schema JSON-LD absent sur toutes les pages</div>
+                <div class="issue-desc">Rank Math devrait générer automatiquement le Schema. Vérifier dans Rank Math → Titres et Méta → choisir le type Schema par défaut. Homepage = LocalBusiness ou Organization. Articles = Article. Pages = WebPage.</div>
             </div>
             <span class="issue-severity sev-critical">CRITIQUE</span>
         </div>
@@ -695,8 +702,17 @@
         <div class="issue-row">
             <div class="issue-icon">🔴</div>
             <div class="issue-content">
-                <div class="issue-title">Aucun Schema JSON-LD détecté</div>
-                <div class="issue-desc">Pas de données structurées (Organization, LocalBusiness, Course, FAQPage). Ajouter via un plugin WordPress comme Rank Math ou Schema Pro. Très important pour les rich snippets Google.</div>
+                <div class="issue-title">Meta description absente sur la homepage</div>
+                <div class="issue-desc">La homepage n'a pas de meta description. Google utilise un extrait aléatoire de la page. Aller dans Rank Math → Titres et Méta → Page d'accueil → ajouter meta description (~155 caractères). Vérifier chaque page/article aussi.</div>
+            </div>
+            <span class="issue-severity sev-critical">CRITIQUE</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔴</div>
+            <div class="issue-content">
+                <div class="issue-title">Balise H1 non détectée sur la homepage</div>
+                <div class="issue-desc">La homepage n'a pas de H1 visible. Divi utilise parfois des éléments visuels sans H1 sémantique. Ajouter un module texte avec un H1 optimisé : "Prépa médecine d'excellence à Paris — PASS, LAS, LSPS".</div>
             </div>
             <span class="issue-severity sev-critical">CRITIQUE</span>
         </div>
@@ -704,8 +720,8 @@
         <div class="issue-row">
             <div class="issue-icon">🟡</div>
             <div class="issue-content">
-                <div class="issue-title">Meta descriptions possiblement manquantes</div>
-                <div class="issue-desc">La meta description de la homepage n'a pas été détectée. Vérifier toutes les pages avec un plugin SEO (Yoast/Rank Math). Chaque page doit avoir une meta description unique de 150-160 caractères.</div>
+                <div class="issue-title">Open Graph absent — pas d'aperçu social</div>
+                <div class="issue-desc">Rank Math → Réglages généraux → Réseaux sociaux → activer Open Graph et Twitter Cards. Permet d'afficher une belle image + titre quand les pages sont partagées sur les réseaux.</div>
             </div>
             <span class="issue-severity sev-warning">WARNING</span>
         </div>
@@ -714,7 +730,7 @@
             <div class="issue-icon">🟡</div>
             <div class="issue-content">
                 <div class="issue-title">URLs dupliquées possibles</div>
-                <div class="issue-desc">/prepa-terminale et /preparations/terminale-sante/ semblent être deux pages similaires. /premiere-sante/ et /preparations/premiere-elite/ aussi. Risque de cannibalisation SEO — vérifier et rediriger si nécessaire.</div>
+                <div class="issue-desc">/prepa-terminale et /preparations/terminale-sante/ semblent être deux pages similaires. /premiere-sante/ et /preparations/premiere-elite/ aussi. Risque de cannibalisation SEO — rediriger ou ajouter canonical.</div>
             </div>
             <span class="issue-severity sev-warning">WARNING</span>
         </div>
@@ -722,8 +738,8 @@
         <div class="issue-row">
             <div class="issue-icon">🔵</div>
             <div class="issue-content">
-                <div class="issue-title">Bonne couverture des mots-clés par université</div>
-                <div class="issue-desc">Les pages par université (Sorbonne, Paris-Cité, Saclay, UPEC, SPN) couvrent bien les recherches géo-ciblées comme "prépa PASS Sorbonne".</div>
+                <div class="issue-title">robots.txt présent et bien configuré ✓</div>
+                <div class="issue-desc">Le robots.txt existe avec les bonnes règles : blocage /wp-admin/, /wp-includes/, /tag/, /author/, Allow admin-ajax.php. Référence le sitemap (qui reste en 404).</div>
             </div>
             <span class="issue-severity sev-done">BON</span>
         </div>
@@ -731,8 +747,17 @@
         <div class="issue-row">
             <div class="issue-icon">🔵</div>
             <div class="issue-content">
-                <div class="issue-title">Contenu riche et bien structuré</div>
-                <div class="issue-desc">Pages de présentation détaillées avec stats de réussite (78% d'admission), témoignages, FAQ, et détails des formations. Bonne base de contenu.</div>
+                <div class="issue-title">Blog actif avec ~20+ articles ✓</div>
+                <div class="issue-desc">Le blog sous /blog/ contient ~10 articles (prépa PASS, stats PASS, MMOPK, devenir médecin...) + ~10 pages SEO hors blog (numerus clausus, PASS formation, PASS classement...). Articles récents datant de fin 2025.</div>
+            </div>
+            <span class="issue-severity sev-done">BON</span>
+        </div>
+
+        <div class="issue-row">
+            <div class="issue-icon">🔵</div>
+            <div class="issue-content">
+                <div class="issue-title">Bonne couverture des mots-clés par université ✓</div>
+                <div class="issue-desc">Pages par université (Sorbonne, Paris-Cité, Saclay, UPEC, SPN) couvrent bien les recherches géo-ciblées. ~25+ pages indexées.</div>
             </div>
             <span class="issue-severity sev-done">BON</span>
         </div>
@@ -742,51 +767,228 @@
         <div class="section-title">Checklist technique</div>
         <div class="checklist-item"><span class="check-ok">✓</span> HTTPS — actif</div>
         <div class="checklist-item"><span class="check-ok">✓</span> Mobile responsive — Divi responsive</div>
-        <div class="checklist-item"><span class="check-ok">✓</span> WordPress + Divi — CMS robuste pour le SEO</div>
-        <div class="checklist-item"><span class="check-ok">✓</span> WPRocket — optimisation performance/cache</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> WordPress + Divi — CMS robuste</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> WPRocket — cache + performance</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Rank Math SEO — installé (à reconfigurer)</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Robots.txt — présent et bien configuré</div>
+        <div class="checklist-item"><span class="check-ok">✓</span> Blog actif — ~20+ articles publiés</div>
         <div class="checklist-item"><span class="check-ok">✓</span> ~25+ pages indexées par Google</div>
         <div class="checklist-item"><span class="check-ok">✓</span> Pages par université — bon ciblage géo</div>
         <div class="checklist-item"><span class="check-ok">✓</span> Lazy loading images — activé</div>
-        <div class="checklist-item"><span class="check-ok">✓</span> 3 campus Paris — Quai de la Rapée, Ledru-Rollin, Lauriston</div>
-        <div class="checklist-item"><span class="check-fail">✕</span> Sitemap.xml — 404 (absent !)</div>
-        <div class="checklist-item"><span class="check-fail">✕</span> Robots.txt — non détecté</div>
-        <div class="checklist-item"><span class="check-fail">✕</span> Schema JSON-LD — absent (Organization, LocalBusiness, Course)</div>
-        <div class="checklist-item"><span class="check-warn">⚠</span> Meta descriptions — possiblement manquantes</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> Sitemap.xml — 404 (Rank Math module sitemap désactivé ?)</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> Schema JSON-LD — absent malgré Rank Math</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> Meta descriptions — absentes sur la homepage</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> H1 — absent sur la homepage</div>
+        <div class="checklist-item"><span class="check-fail">✕</span> Open Graph — absent</div>
         <div class="checklist-item"><span class="check-warn">⚠</span> URLs dupliquées — /prepa-terminale vs /preparations/terminale-sante/</div>
-        <div class="checklist-item"><span class="check-warn">⚠</span> Pas de blog/articles SEO — opportunité manquée pour le trafic organique</div>
+        <div class="checklist-item"><span class="check-warn">⚠</span> Canonical tags — non détectés</div>
     </div>
 
     <div class="section">
-        <div class="section-title">Recommandations prioritaires</div>
+        <div class="section-title">Plan d'action prioritaire <span class="badge-red">À faire maintenant</span></div>
         <div class="issue-row">
             <div class="issue-icon">1️⃣</div>
             <div class="issue-content">
-                <div class="issue-title">Installer Rank Math SEO (plugin WordPress)</div>
-                <div class="issue-desc">Génère automatiquement sitemap.xml, robots.txt, Schema JSON-LD, et permet d'ajouter des meta descriptions. Solution tout-en-un pour résoudre les 3 problèmes critiques.</div>
+                <div class="issue-title">Reconfigurer Rank Math — Activer le sitemap</div>
+                <div class="issue-desc">Rank Math → Tableau de bord → activer le module "Plan du site". Puis Rank Math → Réglages du plan du site → cocher Articles, Pages, Catégories. Enfin Réglages → Permaliens → "Enregistrer" (flush rewrite rules). Vérifier : diploma-sante.fr/sitemap_index.xml doit afficher le XML.</div>
             </div>
         </div>
         <div class="issue-row">
             <div class="issue-icon">2️⃣</div>
             <div class="issue-content">
-                <div class="issue-title">Soumettre le sitemap à Google Search Console</div>
-                <div class="issue-desc">Une fois le sitemap créé, le soumettre dans la Search Console pour accélérer l'indexation de toutes les pages.</div>
+                <div class="issue-title">Activer Schema JSON-LD dans Rank Math</div>
+                <div class="issue-desc">Rank Math → Titres et Méta → Page d'accueil → Type de Schema = "LocalBusiness" (nom: Diploma Santé, adresse campus). Puis Titres et Méta → Articles → Type = "Article". Pages → Type = "WebPage". Activer aussi FAQPage sur les pages avec des FAQ.</div>
             </div>
         </div>
         <div class="issue-row">
             <div class="issue-icon">3️⃣</div>
             <div class="issue-content">
-                <div class="issue-title">Ajouter un blog avec articles SEO</div>
-                <div class="issue-desc">Créer un blog directement sur diploma-sante.fr pour capter du trafic organique sur des requêtes informatives : "réussir PASS", "choisir sa fac de médecine", "taux de réussite PASS 2026", etc.</div>
+                <div class="issue-title">Ajouter H1 + Meta description sur la homepage</div>
+                <div class="issue-desc">Dans Divi : ajouter un module Texte avec H1 "Prépa médecine d'excellence à Paris — PASS, LAS, LSPS". Dans Rank Math (panneau article) : ajouter meta description "Diploma Santé, prépa médecine à Paris. 78% d'admission. Prépa PASS, LAS, LSPS, Terminale Santé. 3 campus à Paris."</div>
             </div>
         </div>
         <div class="issue-row">
             <div class="issue-icon">4️⃣</div>
             <div class="issue-content">
+                <div class="issue-title">Activer Open Graph + Twitter Cards</div>
+                <div class="issue-desc">Rank Math → Réglages généraux → Réseaux sociaux → activer Open Graph et Twitter Cards. Ajouter l'image par défaut (logo ou photo campus). Permet un bel aperçu quand le site est partagé.</div>
+            </div>
+        </div>
+        <div class="issue-row">
+            <div class="issue-icon">5️⃣</div>
+            <div class="issue-content">
+                <div class="issue-title">Soumettre le sitemap à Google Search Console</div>
+                <div class="issue-desc">Une fois le sitemap fonctionnel, le soumettre dans la Search Console (diploma-sante.fr/sitemap_index.xml). Devrait faire passer les pages indexées de ~15 à 40+ en 2-4 semaines.</div>
+            </div>
+        </div>
+        <div class="issue-row">
+            <div class="issue-icon">6️⃣</div>
+            <div class="issue-content">
                 <div class="issue-title">Fusionner les pages dupliquées</div>
-                <div class="issue-desc">Rediriger /prepa-terminale → /preparations/terminale-sante/ et /premiere-sante/ → /preparations/premiere-elite/ pour éviter la cannibalisation.</div>
+                <div class="issue-desc">Rediriger /prepa-terminale → /preparations/terminale-sante/ et /premiere-sante/ → /preparations/premiere-elite/. Utiliser Rank Math → Redirections pour configurer les 301.</div>
+            </div>
+        </div>
+        <div class="issue-row">
+            <div class="issue-icon">7️⃣</div>
+            <div class="issue-content">
+                <div class="issue-title">Continuer le blog — Publier 3-4 articles/semaine</div>
+                <div class="issue-desc">Le blog existe et est actif, c'est bien. Ajouter des articles ciblés : "devenir [spécialité]" (comme Antémed qui en a 30+), FAQ par université, guides Parcoursup. Minimum 1500 mots, meta description Rank Math, liens internes.</div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- ===================== CONCURRENTS ===================== -->
+<div class="site-view" id="view-concurrents">
+
+    <div class="alert-banner">
+        <div class="alert-icon">⚔️</div>
+        <div class="alert-text">
+            <div class="alert-title">Audit concurrentiel — Mars 2026</div>
+            <div class="alert-desc">Comparaison SEO de diploma-sante.fr avec les 3 principaux concurrents parisiens : Antémed Epsilon, Médisup et CPCM.</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Tableau comparatif <span class="badge">4 prépas analysées</span></div>
+        <table>
+            <thead>
+                <tr><th>Critère</th><th style="color:#c5a55a;">Diploma Santé</th><th>Antémed Epsilon</th><th>Médisup</th><th>CPCM</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Site</strong></td><td>diploma-sante.fr</td><td>antemed-epsilon.fr</td><td>medisup.com</td><td>prepa-cpcm.com</td></tr>
+                <tr><td><strong>Fondé</strong></td><td>~2014</td><td style="color:#4caf50;">1978 (48 ans)</td><td>~1994 (30 ans)</td><td>1986 (40 ans)</td></tr>
+                <tr><td><strong>CMS</strong></td><td>WordPress + Divi</td><td>WordPress + Elementor</td><td>WordPress custom</td><td>WordPress + Elementor</td></tr>
+                <tr><td><strong>Plugin SEO</strong></td><td style="color:#ff9800;">Rank Math (mal config)</td><td style="color:#4caf50;">Rank Math ✓</td><td style="color:#4caf50;">Plugin custom ✓</td><td style="color:#4caf50;">Yoast SEO ✓</td></tr>
+                <tr style="background:#1a1b25;"><td><strong>Pages dans sitemap</strong></td><td style="color:#f44336;">0 (404!)</td><td style="color:#4caf50;">142</td><td style="color:#4caf50;">200+</td><td style="color:#4caf50;">108</td></tr>
+                <tr><td><strong>Pages indexées Google</strong></td><td style="color:#ff9800;">~15</td><td style="color:#4caf50;">100+</td><td style="color:#4caf50;">200+</td><td style="color:#4caf50;">100+</td></tr>
+                <tr><td><strong>Blog / Articles</strong></td><td style="color:#4caf50;">~20 articles</td><td style="color:#4caf50;">~40+ articles</td><td style="color:#4caf50;">Blog actif multi-villes</td><td style="color:#4caf50;">51 articles</td></tr>
+                <tr style="background:#1a1b25;"><td><strong>Sitemap.xml</strong></td><td><span class="pill-noindex">404 !</span></td><td><span class="pill-indexed">OK ✓</span></td><td><span class="pill-indexed">OK ✓</span></td><td><span class="pill-indexed">OK ✓</span></td></tr>
+                <tr><td><strong>Robots.txt</strong></td><td><span class="pill-indexed">OK ✓</span></td><td><span class="pill-indexed">OK ✓</span></td><td><span class="pill-indexed">OK ✓</span></td><td><span class="pill-indexed">OK ✓</span></td></tr>
+                <tr><td><strong>Schema JSON-LD</strong></td><td><span class="pill-noindex">Absent</span></td><td><span class="pill-indexed">Complet</span></td><td><span class="pill-indexed">Complet</span></td><td><span class="pill-indexed">Complet</span></td></tr>
+                <tr style="background:#1a1b25;"><td><strong>Meta description</strong></td><td><span class="pill-noindex">Absente</span></td><td><span class="pill-indexed">Optimisée</span></td><td><span class="pill-indexed">Optimisée</span></td><td><span class="pill-indexed">Optimisée</span></td></tr>
+                <tr><td><strong>H1 homepage</strong></td><td><span class="pill-noindex">Absent</span></td><td><span class="pill-indexed">Optimisé</span></td><td><span class="pill-indexed">Optimisé</span></td><td><span class="pill-indexed">Optimisé</span></td></tr>
+                <tr><td><strong>Open Graph</strong></td><td><span class="pill-noindex">Absent</span></td><td><span class="pill-indexed">OK ✓</span></td><td><span class="pill-indexed">OK ✓</span></td><td><span class="pill-indexed">OK ✓</span></td></tr>
+                <tr><td><strong>Canonical tags</strong></td><td><span class="pill-noindex">Non détecté</span></td><td><span class="pill-indexed">OK ✓</span></td><td><span class="pill-indexed">OK ✓</span></td><td><span class="pill-indexed">OK ✓</span></td></tr>
+                <tr style="background:#1a1b25;"><td><strong>Google Tag Manager</strong></td><td><span class="pill-noindex">Non</span></td><td><span class="pill-indexed">GTM ✓</span></td><td><span class="pill-indexed">GTM ✓</span></td><td><span class="pill-warning">Probable</span></td></tr>
+                <tr><td><strong>Pages "devenir [métier]"</strong></td><td>0</td><td style="color:#4caf50;">30+ pages</td><td>Quelques-unes</td><td>5 pages</td></tr>
+                <tr><td><strong>Pages par université</strong></td><td style="color:#4caf50;">~10 pages</td><td style="color:#4caf50;">~6 pages</td><td style="color:#4caf50;">Multi-villes</td><td style="color:#4caf50;">~8 pages</td></tr>
+                <tr><td><strong>Schema FAQPage</strong></td><td><span class="pill-noindex">Non</span></td><td><span class="pill-warning">Partiel</span></td><td><span class="pill-warning">Partiel</span></td><td><span class="pill-indexed">Oui ✓</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="two-col">
+        <div class="section">
+            <div class="section-title">🏆 Antémed Epsilon <span class="badge-green">Leader SEO</span></div>
+            <div class="issue-row">
+                <div class="issue-icon">💪</div>
+                <div class="issue-content">
+                    <div class="issue-title">142 pages dans le sitemap</div>
+                    <div class="issue-desc">30+ pages "devenir [spécialité]" (dermatologue, chirurgien, psychiatre...) qui génèrent du trafic informationnel. Stratégie SEO agressive et efficace.</div>
+                </div>
+            </div>
+            <div class="issue-row">
+                <div class="issue-icon">💪</div>
+                <div class="issue-content">
+                    <div class="issue-title">Schema complet : Organization + LocalBusiness + Article + VideoObject</div>
+                    <div class="issue-desc">Rich snippets dans Google = meilleur CTR. Adresse, téléphone, vidéo YouTube intégrée.</div>
+                </div>
+            </div>
+            <div class="issue-row">
+                <div class="issue-icon">💪</div>
+                <div class="issue-content">
+                    <div class="issue-title">Fondé en 1978 — Forte autorité de domaine</div>
+                    <div class="issue-desc">48 ans d'existence = signal de confiance E-E-A-T massif pour Google. Difficile à rattraper sur ce critère.</div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">🥈 CPCM <span class="badge-orange">Challenger</span></div>
+            <div class="issue-row">
+                <div class="issue-icon">💪</div>
+                <div class="issue-content">
+                    <div class="issue-title">51 articles de blog actifs</div>
+                    <div class="issue-desc">Blog régulièrement mis à jour (derniers articles février 2026). Couvre Parcoursup, réforme, guides, mineures par université.</div>
+                </div>
+            </div>
+            <div class="issue-row">
+                <div class="issue-icon">💪</div>
+                <div class="issue-content">
+                    <div class="issue-title">Schema FAQPage sur le site</div>
+                    <div class="issue-desc">Génère des rich snippets FAQ dans Google = plus de visibilité, meilleur CTR. Diploma n'a pas ça.</div>
+                </div>
+            </div>
+            <div class="issue-row">
+                <div class="issue-icon">💪</div>
+                <div class="issue-content">
+                    <div class="issue-title">Classes de 20 élèves max + Programme Égalité des chances</div>
+                    <div class="issue-desc">Bon signal E-E-A-T (confiance). -80% de réduction pour étudiants en difficulté = contenu unique et engageant.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🥉 Médisup <span class="badge">Le mastodonte</span></div>
+        <div class="issue-row">
+            <div class="issue-icon">💪</div>
+            <div class="issue-content">
+                <div class="issue-title">200+ pages indexées — 30 centres en France</div>
+                <div class="issue-desc">Multi-villes (Paris, Nice, Bordeaux, Brest, Caen, Reims...) avec pages dédiées par ville. Empreinte SEO massive mais pas focalisée sur Paris uniquement. Se positionne "N°1 de la préparation aux études de santé".</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Position Google "prépa médecine paris" <span class="badge-orange">Mars 2026</span></div>
+        <table>
+            <thead>
+                <tr><th>Position</th><th>Site</th><th>Type</th><th>Commentaire</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>1-2</strong></td><td>hippocast.fr</td><td>Comparateur</td><td>Article classement prépas — pas un concurrent direct</td></tr>
+                <tr><td><strong>3-5</strong></td><td style="color:#4caf50;">antemed-epsilon.fr</td><td>Concurrent</td><td>Homepage bien optimisée, forte autorité</td></tr>
+                <tr><td><strong>5-7</strong></td><td>prepa-connect.com</td><td>Comparateur</td><td>Liste des prépas à Paris</td></tr>
+                <tr><td><strong>~8</strong></td><td style="color:#4caf50;">prepa-cpcm.com</td><td>Concurrent</td><td>Homepage avec H1 bien optimisé</td></tr>
+                <tr><td><strong>~10</strong></td><td style="color:#c5a55a;">diploma-sante.fr</td><td>🏥 Nous</td><td>Via un article blog, pas la homepage → à améliorer</td></tr>
+                <tr><td><strong>~12</strong></td><td style="color:#4caf50;">medisup.com</td><td>Concurrent</td><td>Positionné surtout sur "médisup paris"</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Ce qu'il faut copier des concurrents <span class="badge-green">Quick wins</span></div>
+        <div class="issue-row">
+            <div class="issue-icon">📋</div>
+            <div class="issue-content">
+                <div class="issue-title">Créer 30+ pages "devenir [spécialité]" (copier Antémed)</div>
+                <div class="issue-desc">Antémed a créé des pages : devenir chirurgien, dermatologue, psychiatre, ORL, radiologue, etc. Chaque page = 1 URL indexée + 1 mot-clé ciblé. Facile à produire, fort impact SEO.</div>
+            </div>
+        </div>
+        <div class="issue-row">
+            <div class="issue-icon">📋</div>
+            <div class="issue-content">
+                <div class="issue-title">Ajouter Schema FAQPage (copier CPCM)</div>
+                <div class="issue-desc">CPCM a du Schema FAQPage sur ses pages → rich snippets FAQ dans Google. Ajouter des FAQ sur chaque page prépa + les baliser en FAQPage via Rank Math.</div>
+            </div>
+        </div>
+        <div class="issue-row">
+            <div class="issue-icon">📋</div>
+            <div class="issue-content">
+                <div class="issue-title">Publier articles blog toutes les semaines (copier CPCM)</div>
+                <div class="issue-desc">CPCM publie régulièrement (51 articles). diploma-sante.fr a ~20 articles mais la cadence doit augmenter à 3-4/semaine pour rattraper le retard. Sujets : Parcoursup, réforme, guides par fac, témoignages.</div>
+            </div>
+        </div>
+        <div class="issue-row">
+            <div class="issue-icon">📋</div>
+            <div class="issue-content">
+                <div class="issue-title">Ajouter Schema LocalBusiness avec adresses campus (copier Antémed)</div>
+                <div class="issue-desc">Antémed a Organization + LocalBusiness avec adresse précise + téléphone + email. diploma-sante.fr a 3 campus à afficher : Quai de la Rapée, Ledru-Rollin, Lauriston.</div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- ===================== MAILLAGE & LIENS ===================== -->
