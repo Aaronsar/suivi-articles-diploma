@@ -118,6 +118,16 @@
         .timeline-item.waiting::before { border-color: #666; background: transparent; }
         .timeline-date { font-size: 11px; color: #666; }
         .timeline-text { font-size: 13px; margin-top: 2px; }
+
+        .btn-admin { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; border: 1px solid #444; color: #ccc; background: #1e1f2b; transition: all 0.2s; }
+        .btn-admin:hover { background: #2a2b35; color: white; border-color: #666; }
+        .btn-admin.btn-diploma { border-color: #c5a55a; color: #c5a55a; }
+        .btn-admin.btn-diploma:hover { background: rgba(197,165,90,0.15); }
+        .btn-admin.btn-prepa { border-color: #b39ddb; color: #b39ddb; }
+        .btn-admin.btn-prepa:hover { background: rgba(179,157,219,0.15); }
+        .btn-admin.btn-afem { border-color: #81c784; color: #81c784; }
+        .btn-admin.btn-afem:hover { background: rgba(129,199,132,0.15); }
+        .admin-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -141,6 +151,12 @@
 <!-- ===================== VUE GLOBALE ===================== -->
 <div class="content">
 <div class="site-view active" id="view-overview">
+
+    <div class="admin-bar">
+        <a href="https://diploma-sante.fr/wp-admin/" target="_blank" class="btn-admin btn-diploma">🔑 Admin diploma-sante.fr</a>
+        <a href="https://prepamedecine.fr/admin" target="_blank" class="btn-admin btn-prepa">🔑 Admin prepamedecine.fr</a>
+        <a href="https://www.afem-edu.fr/admin" target="_blank" class="btn-admin btn-afem">🔑 Admin afem-edu.fr</a>
+    </div>
 
     <div class="alert-banner alert-good">
         <div class="alert-icon">✅</div>
@@ -337,6 +353,11 @@
 <!-- ===================== PREPAMEDECINE.FR ===================== -->
 <div class="site-view" id="view-prepa">
 
+    <div class="admin-bar">
+        <a href="https://prepamedecine.fr/admin" target="_blank" class="btn-admin btn-prepa">🔑 Back-office prepamedecine.fr</a>
+        <a href="https://prepamedecine.fr" target="_blank" class="btn-admin">🌐 Voir le site</a>
+    </div>
+
     <div class="alert-banner alert-good">
         <div class="alert-icon">🔄</div>
         <div class="alert-text">
@@ -447,6 +468,11 @@
 
 <!-- ===================== AFEM-EDU.FR ===================== -->
 <div class="site-view" id="view-afem">
+
+    <div class="admin-bar">
+        <a href="https://www.afem-edu.fr/admin" target="_blank" class="btn-admin btn-afem">🔑 Back-office afem-edu.fr</a>
+        <a href="https://www.afem-edu.fr" target="_blank" class="btn-admin">🌐 Voir le site</a>
+    </div>
 
     <div class="alert-banner alert-good">
         <div class="alert-icon">📈</div>
@@ -559,6 +585,11 @@
 
 <!-- ===================== DIPLOMA-SANTE.FR ===================== -->
 <div class="site-view" id="view-diploma">
+
+    <div class="admin-bar">
+        <a href="https://diploma-sante.fr/wp-admin/" target="_blank" class="btn-admin btn-diploma">🔑 Back-office WordPress</a>
+        <a href="https://diploma-sante.fr" target="_blank" class="btn-admin">🌐 Voir le site</a>
+    </div>
 
     <div class="alert-banner" style="background:rgba(197,165,90,0.1);border-color:rgba(197,165,90,0.3);">
         <div class="alert-icon">🏥</div>
