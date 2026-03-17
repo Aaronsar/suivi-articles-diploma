@@ -85,12 +85,28 @@
 
         .row-non_pertinent td { opacity: 0.45; }
         .row-deja_existant td { opacity: 0.55; }
+
+        .admin-links { display: flex; gap: 8px; margin-top: 10px; }
+        .btn-admin { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 5px; font-size: 11px; font-weight: 600; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); transition: all 0.2s; }
+        .btn-admin:hover { background: rgba(255,255,255,0.1); color: white; }
+        .btn-admin.btn-diploma { border-color: #c5a55a; color: #c5a55a; }
+        .btn-admin.btn-prepa { border-color: #b39ddb; color: #b39ddb; }
+        .btn-admin.btn-afem { border-color: #81c784; color: #81c784; }
+        .btn-admin.btn-seo { border-color: #64b5f6; color: #64b5f6; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h1>Suivi Articles — Diploma Santé</h1>
+    <div>
+        <h1>Suivi Articles — Diploma Santé</h1>
+        <div class="admin-links">
+            <a href="https://diploma-sante.fr/wp-admin/" target="_blank" class="btn-admin btn-diploma">🔑 diploma-sante.fr</a>
+            <a href="https://prepamedecine.fr/admin" target="_blank" class="btn-admin btn-prepa">🔑 prepamedecine.fr</a>
+            <a href="https://www.afem-edu.fr/admin" target="_blank" class="btn-admin btn-afem">🔑 afem-edu.fr</a>
+            <a href="seo-dashboard.html" class="btn-admin btn-seo">📊 Dashboard SEO</a>
+        </div>
+    </div>
     <div class="stats">
         <div class="stat"><div class="num" id="stat-total">75</div><div class="label">TOTAL</div></div>
         <div class="stat"><div class="num" id="stat-todo">75</div><div class="label">À FAIRE</div></div>
